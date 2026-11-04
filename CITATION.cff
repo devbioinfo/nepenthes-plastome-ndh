@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use these data or scripts, please cite the article below."
+title: "Complete plastid ndh gene retention in Nepenthes khasiana: comparative plastome analysis across carnivorous plant lineages (data and code)"
+authors:
+  - family-names: Konhar
+    given-names: Ruchishree
+  - family-names: Dash
+    given-names: Debasis
+  - family-names: Biswal
+    given-names: Devendra Kumar
+license: MIT
+repository-code: "https://github.com/OWNER/nepenthes-plastome-ndh"

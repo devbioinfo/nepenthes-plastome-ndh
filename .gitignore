@@ -1,0 +1,4 @@
+data/genbank/
+results/
+__pycache__/
+*.pyc
