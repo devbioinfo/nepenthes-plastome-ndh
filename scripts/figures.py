@@ -425,14 +425,12 @@ def fig3_illustrated(out):
     m = meta()
     tr = Phylo.read('results/kmer/kmer_nj.nwk', 'newick')
     tr.root_with_outgroup('Amborella_trichopoda'); tr.ladderize(reverse=True)
+    a_, b_ = tr.root.clades; tot = (a_.branch_length or 0) + (b_.branch_length or 0)
+    a_.branch_length = b_.branch_length = tot / 2          # place the root midway on the outgroup branch
     terms = tr.get_terminals(); n = len(terms)
     yy = {t: i for i, t in enumerate(terms)}
-    height = {}
-    def ht(c):
-        height[c] = 0 if c.is_terminal() else 1 + max(ht(ch) for ch in c.clades)
-        return height[c]
-    ht(tr.root); Hmax = height[tr.root]
-    X = {c: 1 - height[c] / Hmax for c in tr.find_clades()}
+    dep = tr.depths(); DMAX = max(dep[t] for t in terms)
+    X = {c: dep[c] / DMAX for c in tr.find_clades()}   # phylogram: x proportional to Mash distance
     def sety(c):
         if c in yy: return yy[c]
         v = [sety(ch) for ch in c.clades]; yy[c] = (min(v) + max(v)) / 2; return yy[c]
@@ -453,8 +451,8 @@ def fig3_illustrated(out):
     fig = plt.figure(figsize=(W_in, H_in))
     ax = fig.add_axes([0.0, 0.06, 1.0, 0.88])
     XMAX = 2.95
-    ax.set_xlim(-0.02, XMAX); ax.set_ylim(n + 0.5, -3.6); ax.axis('off')
-    ux = (XMAX + 0.02) / W_in; uy = (n + 4.1) / (H_in * 0.88)
+    ax.set_xlim(-0.02, XMAX); ax.set_ylim(n + 2.4, -3.6); ax.axis('off')
+    ux = (XMAX + 0.02) / W_in; uy = (n + 6.0) / (H_in * 0.88)
 
     def picture(name, xc, yc, h_rows, z=3):
         img = plt.imread(f'figures/plants/{name}.png')
@@ -482,13 +480,18 @@ def fig3_illustrated(out):
             ax.plot(X[c], yy[c], 'o', ms=1.6, color='#111111', zorder=3)
     draw(tr.root)
     ax.plot([X[tr.root] - 0.02, X[tr.root]], [yy[tr.root]] * 2, color='#111111', lw=0.9)
+    sb = 0.05 / DMAX
+    ax.plot([0.0, sb], [n + 1.2] * 2, color='#111111', lw=0.9)
+    ax.text(sb / 2, n + 1.6, '0.05', ha='center', va='top', fontsize=5.5, color=INK2)
     # tip labels
     for t in terms:
         col = colour.get(id(t), '#000000')
-        ax.plot(1.0, yy[t], 's', ms=1.6, color='#111111', zorder=3)
-        ax.text(1.012, yy[t], pretty(t.name), va='center', fontsize=5.0, color=col, style='italic')
+        if X[t] < 0.995:
+            ax.plot([X[t], 1.0], [yy[t]] * 2, color='#c9c8c3', lw=0.45, ls=(0, (1, 1.5)), zorder=1)
+        ax.add_patch(Rectangle((1.004, yy[t] - 0.33), 0.016, 0.66, color=ORDER_COL[m.loc[t.name, 'order']], lw=0, zorder=3))
+        ax.text(1.026, yy[t], pretty(t.name), va='center', fontsize=5.0, color=col, style='italic')
     # ndh matrix
-    mx0, cw = 1.40, 0.028
+    mx0, cw = 1.43, 0.028
     sym = {'F': dict(fc='#1a1a1a', ec='#1a1a1a'), 'P': dict(fc='white', ec='#1a1a1a'), '-': dict(fc='#ecebe6', ec='#ecebe6')}
     for t in terms:
         r = ndh.loc[t.name]
@@ -507,7 +510,7 @@ def fig3_illustrated(out):
         xv = sx0 + sw * (v - 100) / 100
         ax.plot([xv, xv], [n - 0.3, n - 0.1], color=INK2, lw=0.5)
         ax.text(xv, n + 0.4, f'{v}', ha='center', va='top', fontsize=4.6, color=INK2)
-    ax.text(sx0 + sw / 2, n + 1.3, 'kb', ha='center', va='top', fontsize=4.8, color=INK2)
+    ax.text(sx0 + sw / 2, n + 1.3, 'Plastome size (kb)', ha='center', va='top', fontsize=5.5, color=INK)
     # family brackets and labels
     bx = sx0 + sw + 0.04
     for key, (mrca, tips, col, band, flab, fcol) in groups.items():
@@ -533,23 +536,23 @@ def fig3_illustrated(out):
     picture('nepenthes', px + 0.30, yof('Nepenthes'), 4.6)
     picture('drosophyllum', px + 0.09, yof('Drosophyllum') + 0.4, 4.4)
     picture('triphyophyllum', px + 0.20, yof('Triphyophyllum') + 0.6, 4.0)
-    picture('brocchinia', px + 0.33, yof('Brocchinia'), 4.4)
+    picture('brocchinia', px + 0.30, yof('Brocchinia') + 0.2, 4.4)
+    picture('cephalotus', px + 0.42, yof('Cephalotus') - 0.6, 3.0)
     picture('amborella', px + 0.12, yof('Amborella') + 0.4, 3.0)
     # drawings within the tree area, beside their clades
     dro = [t for t in terms if t.name.startswith(('Drosera', 'Dionaea', 'Aldrovanda'))]
     yd = (min(yy[t] for t in dro) + max(yy[t] for t in dro)) / 2
-    picture('aldrovanda', 0.38, yd, 4.2); picture('drosera', 0.52, yd, 4.6); picture('dionaea', 0.66, yd, 4.6)
-    picture('cephalotus', 0.42, yof('Cephalotus') - 1.8, 3.8)
+    picture('aldrovanda', 0.06, yd - 0.5, 3.8); picture('drosera', 0.135, yd - 0.3, 4.2); picture('dionaea', 0.20, yd - 0.3, 4.2)
     lent = [t for t in terms if t.name.startswith(('Genlisea', 'Pinguicula', 'Utricularia'))]
     yl0 = min(yy[t] for t in lent)
     picture('genlisea_root', 0.30, yl0 + 4.5, 8.0, z=1)
     picture('pinguicula_flower', 0.30, yl0 + 13.0, 8.5, z=1)
-    ax.set_xlim(-0.02, XMAX); ax.set_ylim(n + 0.5, -3.6); ax.set_aspect('auto')
+    ax.set_xlim(-0.02, XMAX); ax.set_ylim(n + 2.4, -3.6); ax.set_aspect('auto')
     # legend
     hs = [Patch(fc='#1a1a1a', ec='#1a1a1a', label='functional'), Patch(fc='white', ec='#1a1a1a', label='pseudogene'),
-          Patch(fc='#ecebe6', ec='#ecebe6', label='absent')]
-    ax.legend(handles=hs, loc='lower center', bbox_to_anchor=(mx0 / XMAX + 0.06, -0.075), ncol=3, frameon=False, fontsize=5.8,
-              handlelength=1.0, columnspacing=1.0)
+          Patch(fc='#ecebe6', ec='#ecebe6', label='absent')] + [Patch(fc=c, label=o) for o, c in ORDER_COL.items()]
+    ax.legend(handles=hs, loc='upper center', bbox_to_anchor=(0.5, -0.02), ncol=9, frameon=False, fontsize=6,
+              handlelength=1.0, columnspacing=1.2)
     fig.savefig(out, bbox_inches='tight', dpi=300); plt.close(fig)
 
 
