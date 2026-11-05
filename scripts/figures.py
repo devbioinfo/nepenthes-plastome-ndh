@@ -717,6 +717,140 @@ def fig5_nature(out):
         fig.savefig(out, dpi=300, bbox_inches='tight'); plt.close(fig)
 
 
+def fig6_nature(out):
+    """Figure 6: whole-plastome ANI. A, clustered matrix (lower: ANI; upper: aligned fraction);
+    B, ANI by taxonomic level; C, ANI vs ML patristic distance; D, aligned fraction vs ANI."""
+    from matplotlib.gridspec import GridSpec
+    from matplotlib.colors import Normalize
+    import itertools
+    rc = {'font.family': 'Liberation Sans', 'font.size': 7, 'axes.linewidth': 0.5, 'xtick.major.width': 0.5,
+          'ytick.major.width': 0.5, 'xtick.major.size': 2, 'ytick.major.size': 2}
+    with plt.rc_context(rc):
+        m = meta()
+        A = pd.read_csv('results/ani/ani_matrix.tsv', sep='\t', index_col=0)
+        F = pd.read_csv('results/ani/alignment_fraction.tsv', sep='\t', index_col=0).loc[A.index, A.index]
+        Asym = (A.values + A.values.T) / 2; Fsym = (F.values + F.values.T) / 2
+        D = 100 - Asym; np.fill_diagonal(D, 0)
+        Z = linkage(squareform(D, checks=False), method='average')
+        o = leaves_list(Z); names = list(A.index[o]); n = len(names)
+        Ma = Asym[np.ix_(o, o)]; Mf = Fsym[np.ix_(o, o)]
+        fam = [m.loc[t, 'family'] for t in names]; ordr = [m.loc[t, 'order'] for t in names]
+        # comparison classes
+        tr = Phylo.read('results/phylogeny/cds_ml.treefile', 'newick')
+        tips = {t.name: t for t in tr.get_terminals()}
+        rows = []
+        for i, j in itertools.combinations(range(len(A.index)), 2):
+            a, b = A.index[i], A.index[j]
+            if 'Amborella' in a or 'Amborella' in b: cls = 'Outgroup'
+            elif a.split('_')[0] == b.split('_')[0]: cls = 'Within genus'
+            elif m.loc[a, 'family'] == m.loc[b, 'family']: cls = 'Within family'
+            elif m.loc[a, 'order'] == m.loc[b, 'order']: cls = 'Within order'
+            else: cls = 'Between orders'
+            rows.append(dict(a=a, b=b, ani=Asym[i, j], af=Fsym[i, j], cls=cls, pd=tr.distance(tips[a], tips[b])))
+        P = pd.DataFrame(rows)
+        P.to_csv('results/ani/pairwise_ani_classes.csv', index=False)
+        CLS = ['Within genus', 'Within family', 'Within order', 'Between orders', 'Outgroup']
+        CC = {'Within genus': '#0d366b', 'Within family': '#2a78d6', 'Within order': '#1baf7a',
+              'Between orders': '#eda100', 'Outgroup': '#8a8984'}
+
+        fig = plt.figure(figsize=(7.2, 9.3))
+        gsT = GridSpec(1, 1, figure=fig, left=0.22, right=0.90, top=0.985, bottom=0.365)
+        gs = GridSpec(1, 3, figure=fig, width_ratios=[1.2, 1, 1], wspace=0.42, left=0.08, right=0.985, top=0.235, bottom=0.07)
+        # ---- A: matrix
+        axA = fig.add_subplot(gsT[0, 0])
+        cA = LinearSegmentedColormap.from_list('ani', ['#f7f4ea', '#c9e3d6', '#6fb7c2', '#2a78d6', '#1b3f8c', '#0b1a3d'])
+        cF = LinearSegmentedColormap.from_list('af', ['#fbf7f2', '#f6d7bf', '#eda16b', '#c75b26', '#6e2a0c'])
+        low = np.where(np.tril(np.ones((n, n), bool), -1), Ma, np.nan)
+        up = np.where(np.triu(np.ones((n, n), bool), 1), Mf * 100, np.nan)
+        imA = axA.imshow(low, cmap=cA, vmin=80, vmax=100, interpolation='nearest', aspect='equal')
+        imF = axA.imshow(up, cmap=cF, vmin=20, vmax=100, interpolation='nearest', aspect='equal')
+        for k in range(n):
+            axA.add_patch(Rectangle((k - 0.5, k - 0.5), 1, 1, fc='#ffffff', ec='none', zorder=3))
+        # family blocks on the diagonal
+        k = 0
+        while k < n:
+            e = k
+            while e + 1 < n and fam[e + 1] == fam[k]: e += 1
+            axA.add_patch(Rectangle((k - 0.5, k - 0.5), e - k + 1, e - k + 1, fc='none', ec=INK, lw=0.6, zorder=4))
+            k = e + 1
+        axA.set_xlim(-0.5, n - 0.5); axA.set_ylim(n - 0.5, -0.5)
+        axA.set_yticks(range(n)); axA.set_yticklabels([pretty(t) for t in names], fontsize=5.0, style='italic')
+        for tl, f in zip(axA.get_yticklabels(), fam): tl.set_color(FAMCOL[f])
+        axA.set_xticks([]); axA.tick_params(length=0)
+        for sp in axA.spines.values(): sp.set_visible(False)
+        pA = axA.get_position()
+        # family/order strips beneath matrix
+        h = pA.height / n
+        axS = fig.add_axes([pA.x0, pA.y0 - 2.6 * h, pA.width, 2.2 * h])
+        axS.imshow(np.array([[matplotlib.colors.to_rgb(FAMCOL[f]) for f in fam],
+                             [matplotlib.colors.to_rgb(ORDER_COL[x]) for x in ordr]]), aspect='auto', interpolation='nearest')
+        axS.set_yticks([0, 1]); axS.set_yticklabels(['Family', 'Order'], fontsize=5.2); axS.set_xticks([])
+        axS.tick_params(length=0); [sp.set_visible(False) for sp in axS.spines.values()]
+        # dendrogram on the right of the matrix
+        axD = fig.add_axes([pA.x1 + 0.004, pA.y0, 0.07, pA.height])
+        dendrogram(Z, ax=axD, orientation='right', color_threshold=0, above_threshold_color=INK2, no_labels=True)
+        axD.invert_yaxis(); axD.axis('off')
+        for ln in axD.collections: ln.set_linewidth(0.5)
+        # colour bars
+        cx = pA.x0 - 0.205
+        c1 = fig.add_axes([pA.x0 + 0.02, pA.y0 - 0.058, 0.22, 0.008]); cb1 = fig.colorbar(imA, cax=c1, orientation='horizontal')
+        cb1.set_label('ANI, lower triangle (%)', fontsize=5.6, labelpad=1.5); cb1.ax.tick_params(labelsize=5.2, length=1.5); cb1.outline.set_linewidth(0.4)
+        c2 = fig.add_axes([pA.x1 - 0.24, pA.y0 - 0.058, 0.22, 0.008]); cb2 = fig.colorbar(imF, cax=c2, orientation='horizontal')
+        cb2.set_label('Aligned fraction, upper triangle (%)', fontsize=5.6, labelpad=1.5); cb2.ax.tick_params(labelsize=5.2, length=1.5); cb2.outline.set_linewidth(0.4)
+
+        rng = np.random.default_rng(1)
+        # ---- B: ANI by level
+        axB = fig.add_subplot(gs[0, 0])
+        for i_, c in enumerate(CLS):
+            v = P.loc[P.cls == c, 'ani'].values
+            axB.scatter(i_ + rng.uniform(-0.28, 0.28, len(v)), v, s=2.2, color=CC[c], alpha=0.45, lw=0, zorder=2, rasterized=True)
+            q1, q2, q3 = np.percentile(v, [25, 50, 75])
+            axB.add_patch(Rectangle((i_ - 0.32, q1), 0.64, q3 - q1, fc='none', ec=INK, lw=0.6, zorder=3))
+            axB.plot([i_ - 0.32, i_ + 0.32], [q2, q2], color=INK, lw=1.0, zorder=3)
+            axB.text(i_, 101.0, f'{len(v)}', ha='center', fontsize=4.8, color=INK2)
+        axB.text(-0.95, 101.0, 'n =', ha='right', fontsize=4.8, color=INK2)
+        axB.set_xticks(range(len(CLS))); axB.set_xticklabels(['Same\ngenus', 'Same\nfamily', 'Same\norder', 'Different\norders', 'vs\noutgroup'], fontsize=5.2)
+        axB.set_ylabel('ANI (%)'); axB.set_ylim(78, 102)
+        axB.set_xlim(-0.6, len(CLS) - 0.4)
+        # ---- C: ANI vs patristic distance
+        axC = fig.add_subplot(gs[0, 1])
+        for c in CLS:
+            q = P[P.cls == c]
+            axC.scatter(q.pd, q.ani, s=3, color=CC[c], alpha=0.6, lw=0, label=c, rasterized=True)
+        xs = np.sort(P.pd.values); bins = np.quantile(xs, np.linspace(0, 1, 13))
+        mid = [(P.pd[(P.pd >= a) & (P.pd <= b)]).median() for a, b in zip(bins[:-1], bins[1:])]
+        med = [(P.ani[(P.pd >= a) & (P.pd <= b)]).median() for a, b in zip(bins[:-1], bins[1:])]
+        axC.plot(mid, med, color=INK, lw=0.9, zorder=4)
+        rho = pd.Series(P.pd).corr(pd.Series(P.ani), method='spearman')
+        axC.text(0.97, 0.96, f'Spearman ρ = {rho:.2f}', transform=axC.transAxes, ha='right', va='top', fontsize=5.4)
+        axC.set_xlabel('Patristic distance (subst./site)'); axC.set_ylabel('ANI (%)'); axC.set_ylim(78, 102)
+        # ---- D: aligned fraction vs ANI
+        axDd = fig.add_subplot(gs[0, 2])
+        for c in CLS:
+            q = P[P.cls == c]
+            axDd.scatter(q.ani, q.af * 100, s=3, color=CC[c], alpha=0.6, lw=0, rasterized=True)
+        rho2 = pd.Series(P.ani).corr(pd.Series(P.af), method='spearman')
+        axDd.text(0.97, 0.04, f'Spearman ρ = {rho2:.2f}', transform=axDd.transAxes, ha='right', va='bottom', fontsize=5.4)
+        axDd.set_xlabel('ANI (%)'); axDd.set_ylabel('Aligned fraction (%)'); axDd.set_xlim(78, 101); axDd.set_ylim(0, 102)
+        for axx in (axB, axC, axDd):
+            for sp in ('top', 'right'): axx.spines[sp].set_visible(False)
+            axx.tick_params(labelsize=6)
+        LBL = dict(zip(CLS, ['Same genus', 'Same family', 'Same order', 'Different orders', 'Versus outgroup']))
+        hs = [Line2D([], [], ls='', marker='o', color=CC[c], markersize=4, label=LBL[c]) for c in CLS]
+        fig.legend(handles=hs, loc='lower center', ncol=5, frameon=False, fontsize=5.8, bbox_to_anchor=(0.53, 0.0),
+                   handletextpad=0.2, columnspacing=1.2)
+        hf = [Patch(fc=FAMCOL[f], label=f) for f in dict.fromkeys(fam)] + [Patch(fc=ORDER_COL[x], label=x) for x in dict.fromkeys(ordr)]
+        fig.legend(handles=hf, loc='upper center', ncol=8, frameon=False, fontsize=5.4, bbox_to_anchor=(0.53, pA.y0 - 0.085),
+                   handlelength=1.0, handleheight=0.8, handletextpad=0.4, labelspacing=0.3, columnspacing=1.0)
+        fig.text(0.015, pA.y1 + 0.004, 'A', fontsize=9, weight='bold')
+        for axx, lab in ((axB, 'B'), (axC, 'C'), (axDd, 'D')):
+            p_ = axx.get_position(); fig.text(p_.x0 - 0.065, p_.y1 + 0.022, lab, fontsize=9, weight='bold')
+        fig.savefig(out, dpi=300, bbox_inches='tight'); plt.close(fig)
+        print(P.groupby('cls').ani.describe().round(2)); print('rho_pd', round(rho, 3), 'rho_af', round(rho2, 3))
+        print(P.groupby('cls').af.median().round(3))
+
+
+
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(); ap.add_argument('--outdir', default='figures'); ap.add_argument('--only', default='')
     a = ap.parse_args(); os.makedirs(a.outdir, exist_ok=True)
@@ -725,7 +859,8 @@ if __name__ == '__main__':
     if '3plain' in todo: fig3(os.path.join(a.outdir, 'Figure3_plain.png'))
     if '5' in todo: fig5_nature(os.path.join(a.outdir, 'Figure5.png'))
     if '5plain' in todo: fig5(os.path.join(a.outdir, 'Figure5_plain.png'))
-    if '6' in todo: fig6(os.path.join(a.outdir, 'Figure6.png'))
+    if '6' in todo: fig6_nature(os.path.join(a.outdir, 'Figure6.png'))
+    if '6plain' in todo: fig6(os.path.join(a.outdir, 'Figure6_plain.png'))
     if 'S1' in todo: figS1(os.path.join(a.outdir, 'FigureS1.png'))
     if '2A' in todo: fig2a_classic(os.path.join(a.outdir, 'Figure2A.png'))
     if '2Aflat' in todo: fig2a(os.path.join(a.outdir, 'Figure2A_alltips.png'))

@@ -25,7 +25,8 @@ Requirements: Python ≥ 3.9 with numpy, scipy, pandas, matplotlib, biopython an
 | Codon alignment of 68 shared protein-coding genes (MAFFT L-INS-i) | `scripts/build_cds_alignment.py` | `results/phylogeny/concatenated_cds.fasta` (56,523 sites) | Methods 2.3, Table S3 |
 | ML tree (ModelFinder → GTR+F+I+G4 by AICc; 1,000 UFBoot + SH-aLRT) | IQ-TREE call in `run_all.sh` | `results/phylogeny/cds_ml.*` | Figure 2A |
 | 15-mer Mash distances and neighbour-joining tree | `scripts/kmer_distance.py` | `results/kmer/` | Figure 3 |
-| Whole-plastome ANIb (1,020-nt fragments, dc-megablast) and UPGMA | `scripts/plastome_ani.py` | `results/ani/` | Figure 6 |
+| Whole-plastome ANIb (1,020-nt fragments, dc-megablast), aligned fraction and UPGMA | `scripts/plastome_ani.py` | `results/ani/` | Figure 6A |
+| ANI by taxonomic level and vs ML patristic distance | `scripts/figures.py` (fig6_nature) | `results/ani/pairwise_ani_classes.csv` | Figure 6B–D |
 | RSCU (59 codons) and PCA | `scripts/rscu_pca.py` | `results/codon/` | Figure 5 |
 | ENC and GC3s vs. Wright (1990) expectation | `scripts/enc_gc3.py` | `results/codon/enc_gc3.csv` | Figure 5C |
 | dN, dS, dN/dS vs *N. khasiana* (Nei–Gojobori, Biopython) | `scripts/dnds_ng86.py` | `results/dnds/` | Figure S1 |
