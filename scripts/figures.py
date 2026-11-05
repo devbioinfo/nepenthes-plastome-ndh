@@ -284,6 +284,110 @@ def fig2a(out):
     fig.savefig(out, bbox_inches='tight'); plt.close(fig)
 
 
+# ---------------- Figure 2A, classic style (collapsed clades, as in the original figure) ----------------
+CLADES = [  # (label, genus prefixes, fill colour, trap label)
+    ('Lentibulariaceae', ('Utricularia',), '#c9c9c9', 'Suction trap'),
+    ('Lentibulariaceae', ('Genlisea',), '#8fdcec', 'Eel trap'),
+    ('Lentibulariaceae', ('Pinguicula',), '#a8d982', 'Adhesive trap'),
+    ('Sarraceniaceae', ('Sarracenia', 'Heliamphora', 'Darlingtonia'), '#c3b5ec', 'Pitfall trap'),
+    ('Droseraceae', ('Drosera', 'Dionaea', 'Aldrovanda'), '#f6b3bd', 'Snap / adhesive traps'),
+    ('Nepenthaceae', ('Nepenthes',), '#f7b54a', 'Pitfall trap'),
+    ('Bromeliaceae', ('Brocchinia',), '#ef7d7c', 'Pitfall trap'),
+]
+SINGLE = {'Roridula_gorgonias': ('Roridulaceae', '#c2398a', 'Flypaper trap'),
+          'Drosophyllum_lusitanicum': ('Drosophyllaceae', '#2a5bd6', 'Adhesive trap'),
+          'Triphyophyllum_peltatum': ('Dioncophyllaceae', '#2a5bd6', 'Adhesive trap'),
+          'Cephalotus_follicularis': ('Cephalotaceae', '#d08a16', 'Pitfall trap'),
+          'Amborella_trichopoda': ('Amborellaceae (outgroup)', '#2f6b2f', '')}
+
+
+def fig2a_classic(out):
+    tr = Phylo.read('results/phylogeny/cds_ml.treefile', 'newick')
+    tr.root_with_outgroup('Amborella_trichopoda'); tr.ladderize(reverse=True)
+    depths = tr.depths()
+    parent = {id(ch): c for c in tr.find_clades() for ch in c.clades}
+
+    def sup(c):
+        lab = c.name or ''
+        if '/' not in lab or c is tr.root:
+            return
+        ufb = float(lab.split('/')[1])
+        p = parent.get(id(c))
+        x = (depths[p] + depths[c]) / 2 if p is not None else depths[c]
+        ax.text(x, y[c] - 0.22, f'{ufb:.0f}%', ha='center', va='bottom', fontsize=4.8, color=INK2,
+                bbox=dict(boxstyle='square,pad=0.05', fc='white', ec='none'), zorder=4)
+    mrca = {}
+    for lab, pre, col, trap in CLADES:
+        tips = [x for x in tr.get_terminals() if x.name.startswith(pre)]
+        mrca[id(tr.common_ancestor(tips))] = (lab, col, trap, tips)
+    y = {}; rows = []; cur = [0.0]
+    def place(c):
+        if id(c) in mrca:
+            lab, col, trap, tips = mrca[id(c)]
+            order = [t for t in c.get_terminals()]
+            h = max(len(order), 2) * 0.62 + 0.6
+            y[c] = cur[0] + h / 2
+            rows.append(('clade', c, cur[0], cur[0] + h, order)); cur[0] += h + 0.5
+            return y[c]
+        if c.is_terminal():
+            y[c] = cur[0] + 0.6; rows.append(('tip', c, cur[0], cur[0] + 1.2, [c])); cur[0] += 1.8
+            return y[c]
+        ys = [place(ch) for ch in c.clades]
+        y[c] = (min(ys) + max(ys)) / 2
+        return y[c]
+    place(tr.root)
+    H = cur[0]
+    xmax = max(depths.values())
+    fig = plt.figure(figsize=(6.4, 7.6))
+    ax = fig.add_axes([0.02, 0.05, 0.96, 0.92])
+    def draw(c):
+        if id(c) in mrca or c.is_terminal():
+            return
+        x1 = depths[c]
+        ys = [y[ch] for ch in c.clades]
+        ax.plot([x1, x1], [min(ys), max(ys)], color=INK, lw=0.9)
+        for ch in c.clades:
+            ax.plot([x1, depths[ch]], [y[ch], y[ch]], color=INK, lw=0.9)
+            draw(ch)
+        sup(c)
+        ax.plot(x1, y[c], 'o', ms=1.8, color=INK)
+    draw(tr.root)
+    lx = xmax * 1.04
+    for kind, c, y0, y1, tips in rows:
+        if kind == 'clade':
+            lab, col, trap, _ = mrca[id(c)]
+            x0 = depths[c]; xe = max(depths[t] for t in tips)
+            ax.add_patch(plt.Polygon([[x0, y[c]], [xe, y0 + 0.2], [xe, y1 - 0.2]], closed=True, fc=col, ec=col, lw=0.6, alpha=0.9))
+            sup(c)
+            ax.plot(x0, y[c], 'o', ms=1.8, color=INK)
+            step = (y1 - y0 - 0.6) / max(len(tips) - 1, 1) if len(tips) > 1 else 0
+            for k, t in enumerate(tips):
+                yy = y0 + 0.3 + k * step if len(tips) > 1 else y[c]
+                ax.text(lx, yy, pretty(t.name), va='center', fontsize=5.6, style='italic', color=INK)
+            ax.plot([lx + xmax * 0.62] * 2, [y0 + 0.2, y1 - 0.2], color=INK2, lw=0.6)
+            ax.text(lx + xmax * 0.65, y[c] - 0.35, lab, va='center', fontsize=7, weight='bold', color=INK)
+            ax.text(lx + xmax * 0.65, y[c] + 0.55, trap, va='center', fontsize=5.8, color='#1c5cab',
+                    bbox=dict(boxstyle='round,pad=0.25', fc='white', ec='#1c5cab', lw=0.5))
+        else:
+            fam, col, trap = SINGLE[c.name]
+            ax.plot([depths[c.clades[0]] if False else depths[c]] * 1, [y[c]], 's', ms=3.2, color=col)
+            ax.text(lx, y[c], pretty(c.name), va='center', fontsize=5.6, style='italic', color=INK)
+            ax.text(lx + xmax * 0.65, y[c], fam, va='center', fontsize=7, weight='bold', color=INK)
+            if trap:
+                ax.annotate(trap, xy=(lx + xmax * 0.65, y[c]), xytext=(len(fam) * 5.0 + 6, 0), textcoords='offset points',
+                            va='center', fontsize=5.8, color='#1c5cab',
+                            bbox=dict(boxstyle='round,pad=0.25', fc='white', ec='#1c5cab', lw=0.5))
+    # dotted leaders from terminals/triangles to names
+    for kind, c, y0, y1, tips in rows:
+        xe = max(depths[t] for t in tips)
+        ax.plot([xe + xmax * 0.01, lx - xmax * 0.01], [y[c], y[c]], color=GRID, lw=0.5, ls=(0, (1, 2)))
+    ax.set_xlim(-xmax * 0.02, xmax * 2.25); ax.set_ylim(H + 1.5, -0.8)
+    ax.plot([0, 0.05], [H + 0.6] * 2, color=INK, lw=0.8)
+    ax.text(0.0, H + 1.4, '0.05 substitutions/site', fontsize=5.5, color=INK2)
+    ax.axis('off')
+    fig.savefig(out, bbox_inches='tight'); plt.close(fig)
+
+
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(); ap.add_argument('--outdir', default='figures'); ap.add_argument('--only', default='')
     a = ap.parse_args(); os.makedirs(a.outdir, exist_ok=True)
@@ -292,4 +396,7 @@ if __name__ == '__main__':
     if '5' in todo: fig5(os.path.join(a.outdir, 'Figure5.png'))
     if '6' in todo: fig6(os.path.join(a.outdir, 'Figure6.png'))
     if 'S1' in todo: figS1(os.path.join(a.outdir, 'FigureS1.png'))
-    if '2A' in todo and os.path.exists('results/phylogeny/cds_ml.contree'): fig2a(os.path.join(a.outdir, 'Figure2A.png'))
+    if '2A' in todo: fig2a_classic(os.path.join(a.outdir, 'Figure2A.png'))
+    if '2Aflat' in todo: fig2a(os.path.join(a.outdir, 'Figure2A_alltips.png'))
+
+
