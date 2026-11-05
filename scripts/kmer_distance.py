@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Alignment-free 15-mer distances between plastomes and a UPGMA tree (cross-check of Figure 3).
+"""Alignment-free 15-mer distances between plastomes and a neighbour-joining tree (Figure 3).
 
 Distance = Mash-style estimate from the Jaccard index J of canonical k-mer sets:
     D = -1/k * ln(2J / (1 + J))
@@ -40,6 +40,32 @@ def newick(node, names):
     return '(' + ','.join(parts) + ')'
 
 
+def nj(D, names):
+    """Saitou & Nei neighbour-joining; returns an unrooted Newick string."""
+    D = D.copy().astype(float)
+    nodes = [n.replace(' ', '_') for n in names]
+    while len(nodes) > 3:
+        n = len(nodes)
+        r = D.sum(axis=1)
+        Q = (n - 2) * D - r[:, None] - r[None, :]
+        np.fill_diagonal(Q, np.inf)
+        i, j = np.unravel_index(np.argmin(Q), Q.shape)
+        if i > j: i, j = j, i
+        li = 0.5 * D[i, j] + (r[i] - r[j]) / (2 * (n - 2))
+        lj = D[i, j] - li
+        new = f'({nodes[i]}:{max(li, 0):.6f},{nodes[j]}:{max(lj, 0):.6f})'
+        du = 0.5 * (D[i] + D[j] - D[i, j])
+        keep = [k for k in range(n) if k not in (i, j)]
+        D2 = np.zeros((len(keep) + 1, len(keep) + 1))
+        D2[:-1, :-1] = D[np.ix_(keep, keep)]
+        D2[-1, :-1] = D2[:-1, -1] = du[keep]
+        D = D2
+        nodes = [nodes[k] for k in keep] + [new]
+    a, b, c = nodes
+    la = 0.5 * (D[0, 1] + D[0, 2] - D[1, 2]); lb = D[0, 1] - la; lc = D[0, 2] - la
+    return f'({a}:{max(la,0):.6f},{b}:{max(lb,0):.6f},{c}:{max(lc,0):.6f});'
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('genbank', nargs='+')
@@ -66,7 +92,9 @@ def main():
     Z = linkage(squareform(D, checks=False), method='average')
     with open(os.path.join(a.outdir, 'kmer_upgma.nwk'), 'w') as fh:
         fh.write(newick(to_tree(Z), names) + ';\n')
-    print('wrote distances and UPGMA tree for', n, 'plastomes')
+    with open(os.path.join(a.outdir, 'kmer_nj.nwk'), 'w') as fh:
+        fh.write(nj(D, names) + '\n')
+    print('wrote distances, NJ and UPGMA trees for', n, 'plastomes')
 
 
 if __name__ == '__main__':

@@ -1,0 +1,235 @@
+IQ-TREE multicore version 2.0.7 for Linux 64-bit built Apr  1 2024
+Developed by Bui Quang Minh, Nguyen Lam Tung, Olga Chernomor,
+Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    vm (AVX512, FMA3, 7 GB RAM)
+Command: iqtree2 -s concatenated_cds.fasta -m MFP -mset JC,F81,K2P,HKY,SYM,GTR -mrate E,I,G,I+G -merit AICc -B 1000 -alrt 1000 -o Amborella_trichopoda -T 2 -seed 12345 --prefix cds_ml
+Seed:    12345 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Thu Nov  5 14:08:40 2026
+Kernel:  AVX+FMA - 2 threads (2 CPU cores detected)
+
+Reading alignment file concatenated_cds.fasta ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+Alignment has 50 sequences with 56523 columns, 22004 distinct patterns
+19110 parsimony-informative, 7800 singleton sites, 29613 constant sites
+                                        Gap/Ambiguity  Composition  p-value
+   1  Utricularia_foliosa                       6.48%    passed     41.19%
+   2  Nepenthes_khasiana                        0.46%    failed      0.29%
+   3  Utricularia_amethystina                   0.44%    passed     25.50%
+   4  Drosera_peltata                          23.81%    passed     39.33%
+   5  Amborella_trichopoda                      1.39%    failed      0.01%
+   6  Utricularia_gibba                         7.21%    passed     43.85%
+   7  Pinguicula_ehlersiae                     15.03%    passed      5.10%
+   8  Genlisea_margaretae                      31.69%    failed      0.00%
+   9  Utricularia_macrorhiza                   38.26%    failed      0.00%
+  10  Utricularia_reniformis                    0.28%    passed     65.13%
+  11  Drosera_rotundifolia                     26.90%    passed     48.00%
+  12  Drosera_erythrorhiza                     24.01%    passed     60.75%
+  13  Drosera_regia                             2.38%    failed      2.87%
+  14  Aldrovanda_vesiculosa                     3.60%    failed      0.13%
+  15  Dionaea_muscipula                         3.77%    failed      0.76%
+  16  Genlisea_aurea                            7.24%    failed      0.16%
+  17  Genlisea_filiformis                       7.48%    failed      0.03%
+  18  Genlisea_pygmaea                          7.73%    failed      0.08%
+  19  Genlisea_repens                           6.99%    failed      0.17%
+  20  Genlisea_tuberosa                         7.29%    failed      0.14%
+  21  Genlisea_violacea                         7.29%    failed      0.33%
+  22  Drosophyllum_lusitanicum                  9.18%    passed     96.89%
+  23  Nepenthes_mirabilis                       2.08%    failed      0.95%
+  24  Cephalotus_follicularis                   1.18%    failed      0.60%
+  25  Nepenthes_ventricosa_x_Nepenthes_alata   21.09%    failed      0.86%
+  26  Pinguicula_alpina                         8.14%    passed      8.75%
+  27  Utricularia_tenuicaulis                   6.43%    passed     19.48%
+  28  Pinguicula_jackii                         0.63%    passed     90.82%
+  29  Sarracenia_alata                          0.35%    failed      0.87%
+  30  Heliamphora_minor                         0.37%    failed      1.95%
+  31  Roridula_gorgonias                        4.66%    failed      0.47%
+  32  Triphyophyllum_peltatum                   1.41%    failed      1.39%
+  33  Brocchinia_acuminata                      0.42%    passed     71.46%
+  34  Brocchinia_hechtioides                    0.45%    passed     70.10%
+  35  Utricularia_adpressa                      1.20%    passed     67.89%
+  36  Drosera_capensis                         11.27%    passed     28.10%
+  37  Pinguicula_vulgaris                       5.91%    passed     10.74%
+  38  Utricularia_aurea                         6.96%    passed     40.22%
+  39  Utricularia_intermedia                    6.41%    passed     26.36%
+  40  Utricularia_minor                         6.42%    passed     21.99%
+  41  Utricularia_vulgaris                      6.39%    passed     24.61%
+  42  Utricularia_arenaria                      0.27%    passed     95.29%
+  43  Utricularia_australis                     0.28%    passed     66.39%
+  44  Utricularia_cucullata                     0.45%    failed      0.00%
+  45  Utricularia_flaccida                      3.59%    failed      0.00%
+  46  Utricularia_geminiloba                    0.40%    passed     65.43%
+  47  Utricularia_graminifolia                  3.32%    passed     66.53%
+  48  Utricularia_hispida                       0.33%    failed      2.47%
+  49  Darlingtonia_californica                  0.65%    passed      6.53%
+  50  Nepenthes_gracilis                        4.43%    failed      0.25%
+****  TOTAL                                     6.89%  24 sequences failed composition chi2 test (p-value<5%; df=3)
+
+
+Create initial parsimony tree by phylogenetic likelihood library (PLL)... 0.081 seconds
+Perform fast likelihood tree search using GTR+I+G model...
+Estimate model parameters (epsilon = 5.000)
+Perform nearest neighbor interchange...
+Estimate model parameters (epsilon = 1.000)
+1. Initial log-likelihood: -435074.529
+Optimal log-likelihood: -435074.482
+Rate parameters:  A-C: 1.62012  A-G: 2.29890  A-T: 0.34984  C-G: 0.99811  C-T: 2.49225  G-T: 1.00000
+Base frequencies:  A: 0.303  C: 0.179  G: 0.208  T: 0.310
+Proportion of invariable sites: 0.258
+Gamma shape alpha: 0.893
+Parameters optimization took 1 rounds (0.615 sec)
+Time for fast ML tree search: 6.434 seconds
+
+NOTE: ModelFinder requires 226 MB RAM!
+ModelFinder will test up to 24 DNA models (sample size: 56523) ...
+ No. Model         -LnL         df  AIC          AICc         BIC
+  1  JC            466795.978   97  933785.956   933786.293   934653.369
+  2  JC+I          450365.988   98  900927.977   900928.321   901804.332
+  3  JC+G4         446582.926   98  893361.853   893362.197   894238.208
+  4  JC+I+G4       446396.637   99  892991.275   892991.626   893876.573
+  5  F81+F         465449.569   100 931099.139   931099.497   931993.379
+  6  F81+F+I       449303.663   101 898809.325   898809.690   899712.508
+  7  F81+F+G4      445725.937   101 891653.874   891654.239   892557.056
+  8  F81+F+I+G4    445543.628   102 891291.256   891291.629   892203.381
+  9  K2P           460642.943   98  921481.887   921482.231   922358.242
+ 10  K2P+I         444065.924   99  888329.849   888330.200   889215.147
+ 11  K2P+G4        440202.051   99  880602.102   880602.453   881487.400
+ 12  K2P+I+G4      440006.612   100 880213.224   880213.582   881107.464
+ 13  HKY+F         458495.410   101 917192.819   917193.185   918096.002
+ 14  HKY+F+I       442365.724   102 884935.448   884935.821   885847.573
+ 15  HKY+F+G4      438775.035   102 877754.069   877754.442   878666.194
+ 16  HKY+F+I+G4    438584.367   103 877374.735   877375.115   878295.802
+ 17  SYM           458484.413   102 917172.827   917173.199   918084.952
+ 18  SYM+I         442142.982   103 884491.964   884492.344   885413.031
+ 19  SYM+G4        438307.810   103 876821.621   876822.001   877742.688
+ 20  SYM+I+G4      438113.387   104 876434.774   876435.161   877364.784
+ 21  GTR+F         454721.717   105 909653.434   909653.828   910592.386
+ 22  GTR+F+I       438945.764   106 878103.529   878103.931   879051.424
+ 23  GTR+F+G4      435273.072   106 870758.143   870758.546   871706.038
+ 24  GTR+F+I+G4    435074.315   107 870362.630   870363.040   871319.467
+Akaike Information Criterion:           GTR+F+I+G4
+Corrected Akaike Information Criterion: GTR+F+I+G4
+Bayesian Information Criterion:         GTR+F+I+G4
+Best-fit model: GTR+F+I+G4 chosen according to AICc
+
+All model information printed to cds_ml.model.gz
+CPU time for ModelFinder: 102.071 seconds (0h:1m:42s)
+Wall-clock time for ModelFinder: 71.673 seconds (0h:1m:11s)
+Generating 1000 samples for ultrafast bootstrap (seed: 12345)...
+
+NOTE: 226 MB RAM (0 GB) is required!
+Estimate model parameters (epsilon = 0.100)
+Thoroughly optimizing +I+G parameters from 10 start values...
+Init pinv, alpha: 0.000, 0.877 / Estimate: 0.000, 0.461 / LogL: -435273.051
+Init pinv, alpha: 0.058, 0.877 / Estimate: 0.200, 0.740 / LogL: -435088.569
+Init pinv, alpha: 0.116, 0.877 / Estimate: 0.237, 0.830 / LogL: -435075.766
+Init pinv, alpha: 0.175, 0.877 / Estimate: 0.236, 0.829 / LogL: -435075.827
+Init pinv, alpha: 0.233, 0.877 / Estimate: 0.237, 0.830 / LogL: -435075.742
+Init pinv, alpha: 0.291, 0.877 / Estimate: 0.266, 0.916 / LogL: -435075.334
+Init pinv, alpha: 0.349, 0.877 / Estimate: 0.265, 0.915 / LogL: -435075.265
+Init pinv, alpha: 0.407, 0.877 / Estimate: 0.265, 0.915 / LogL: -435075.288
+Init pinv, alpha: 0.466, 0.877 / Estimate: 0.266, 0.917 / LogL: -435075.354
+Init pinv, alpha: 0.524, 0.877 / Estimate: 0.266, 0.916 / LogL: -435075.335
+Optimal pinv,alpha: 0.265, 0.915 / LogL: -435075.265
+
+Parameters optimization took 283.355 sec
+Computing ML distances based on estimated model parameters... 0.479 sec
+Computing BIONJ tree...
+0.001 seconds
+Log-likelihood of BIONJ tree: -435546.122
+--------------------------------------------------------------------
+|             INITIALIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Generating 98 parsimony trees... 9.898 second
+Computing log-likelihood of 98 initial trees ... 13.525 seconds
+Current best score: -435075.265
+
+Do NNI search on 20 best initial trees
+Estimate model parameters (epsilon = 0.100)
+BETTER TREE FOUND at iteration 1: -435075.175
+Iteration 10 / LogL: -435111.475 / Time: 0h:5m:29s
+Iteration 20 / LogL: -435075.316 / Time: 0h:5m:55s
+Finish initializing candidate tree set (4)
+Current best tree score: -435075.175 / CPU time: 69.775
+Number of iterations: 20
+--------------------------------------------------------------------
+|               OPTIMIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Iteration 30 / LogL: -435080.041 / Time: 0h:6m:17s (0h:15m:25s left)
+Iteration 40 / LogL: -435122.967 / Time: 0h:6m:40s (0h:10m:25s left)
+Iteration 50 / LogL: -435162.172 / Time: 0h:7m:3s (0h:7m:20s left)
+Log-likelihood cutoff on original alignment: -435133.290
+Iteration 60 / LogL: -435075.789 / Time: 0h:7m:26s (0h:5m:9s left)
+Iteration 70 / LogL: -435130.690 / Time: 0h:7m:49s (0h:3m:30s left)
+Iteration 80 / LogL: -435123.070 / Time: 0h:8m:11s (0h:2m:10s left)
+Iteration 90 / LogL: -435230.229 / Time: 0h:8m:34s (0h:1m:3s left)
+Iteration 100 / LogL: -435123.438 / Time: 0h:8m:56s (0h:0m:5s left)
+Log-likelihood cutoff on original alignment: -435133.466
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 1.000
+TREE SEARCH COMPLETED AFTER 102 ITERATIONS / Time: 0h:9m:2s
+
+--------------------------------------------------------------------
+|                    FINALIZING TREE SEARCH                        |
+--------------------------------------------------------------------
+Performs final model parameters optimization
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -435075.175
+2. Current log-likelihood: -435075.113
+3. Current log-likelihood: -435075.042
+4. Current log-likelihood: -435074.985
+5. Current log-likelihood: -435074.925
+6. Current log-likelihood: -435074.875
+7. Current log-likelihood: -435074.832
+8. Current log-likelihood: -435074.784
+9. Current log-likelihood: -435074.745
+10. Current log-likelihood: -435074.709
+11. Current log-likelihood: -435074.677
+12. Current log-likelihood: -435074.647
+13. Current log-likelihood: -435074.620
+14. Current log-likelihood: -435074.594
+15. Current log-likelihood: -435074.570
+16. Current log-likelihood: -435074.547
+17. Current log-likelihood: -435074.526
+18. Current log-likelihood: -435074.505
+19. Current log-likelihood: -435074.486
+20. Current log-likelihood: -435074.473
+21. Current log-likelihood: -435074.458
+22. Current log-likelihood: -435074.443
+Optimal log-likelihood: -435074.432
+Rate parameters:  A-C: 1.62347  A-G: 2.30334  A-T: 0.35065  C-G: 1.00027  C-T: 2.49725  G-T: 1.00000
+Base frequencies:  A: 0.303  C: 0.179  G: 0.208  T: 0.310
+Proportion of invariable sites: 0.258
+Gamma shape alpha: 0.892
+Parameters optimization took 22 rounds (12.893 sec)
+BEST SCORE FOUND : -435074.432
+
+Testing tree branches by SH-like aLRT with 1000 replicates...
+24.346 sec.
+Creating bootstrap support values...
+Split supports printed to NEXUS file cds_ml.splits.nex
+Total tree length: 1.478
+
+Total number of iterations: 102
+CPU time used for tree search: 495.598 sec (0h:8m:15s)
+Wall-clock time used for tree search: 257.071 sec (0h:4m:17s)
+Total CPU time used: 1124.412 sec (0h:18m:44s)
+Total wall-clock time used: 579.861 sec (0h:9m:39s)
+
+Computing bootstrap consensus tree...
+Reading input file cds_ml.splits.nex...
+50 taxa and 108 splits.
+Consensus tree written to cds_ml.contree
+Reading input trees file cds_ml.contree
+Log-likelihood of consensus tree: -435074.432
+
+Analysis results written to: 
+  IQ-TREE report:                cds_ml.iqtree
+  Maximum-likelihood tree:       cds_ml.treefile
+  Likelihood distances:          cds_ml.mldist
+
+Ultrafast bootstrap approximation results written to:
+  Split support values:          cds_ml.splits.nex
+  Consensus tree:                cds_ml.contree
+  Screen log file:               cds_ml.log
+
+Date and Time: Thu Nov  5 14:19:33 2026

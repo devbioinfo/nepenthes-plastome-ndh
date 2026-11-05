@@ -1,0 +1,363 @@
+IQ-TREE 2.0.7 built Apr  1 2024
+
+Input file name: concatenated_cds.fasta
+Type of analysis: ModelFinder + tree reconstruction + ultrafast bootstrap (1000 replicates)
+Random seed number: 12345
+
+REFERENCES
+----------
+
+To cite IQ-TREE please use:
+
+Bui Quang Minh, Heiko A. Schmidt, Olga Chernomor, Dominik Schrempf,
+Michael D. Woodhams, Arndt von Haeseler, and Robert Lanfear (2020)
+IQ-TREE 2: New models and efficient methods for phylogenetic inference
+in the genomic era. Mol. Biol. Evol., in press.
+https://doi.org/10.1093/molbev/msaa015
+
+To cite ModelFinder please use: 
+
+Subha Kalyaanamoorthy, Bui Quang Minh, Thomas KF Wong, Arndt von Haeseler,
+and Lars S Jermiin (2017) ModelFinder: Fast model selection for
+accurate phylogenetic estimates. Nature Methods, 14:587–589.
+https://doi.org/10.1038/nmeth.4285
+
+Since you used ultrafast bootstrap (UFBoot) please also cite: 
+
+Diep Thi Hoang, Olga Chernomor, Arndt von Haeseler, Bui Quang Minh,
+and Le Sy Vinh (2018) UFBoot2: Improving the ultrafast bootstrap
+approximation. Mol. Biol. Evol., 35:518–522.
+https://doi.org/10.1093/molbev/msx281
+
+SEQUENCE ALIGNMENT
+------------------
+
+Input data: 50 sequences with 56523 nucleotide sites
+Number of constant sites: 29613 (= 52.3911% of all sites)
+Number of invariant (constant or ambiguous constant) sites: 29613 (= 52.3911% of all sites)
+Number of parsimony informative sites: 19110
+Number of distinct site patterns: 22004
+
+ModelFinder
+-----------
+
+Best-fit model according to AICc: GTR+F+I+G4
+
+List of models sorted by AICc scores: 
+
+Model                  LogL         AIC      w-AIC        AICc     w-AICc         BIC      w-BIC
+GTR+F+I+G4      -435074.315  870362.630 +        1  870363.040 +        1  871319.467 +        1
+GTR+F+G4        -435273.072  870758.143 -  1.3e-86  870758.545 - 1.31e-86  871706.038 - 1.14e-84
+SYM+I+G4        -438113.387  876434.774 -        0  876435.161 -        0  877364.784 -        0
+SYM+G4          -438307.810  876821.621 -        0  876822.001 -        0  877742.688 -        0
+HKY+F+I+G4      -438584.367  877374.735 -        0  877375.115 -        0  878295.803 -        0
+HKY+F+G4        -438775.035  877754.069 -        0  877754.442 -        0  878666.194 -        0
+GTR+F+I         -438945.764  878103.529 -        0  878103.931 -        0  879051.424 -        0
+K2P+I+G4        -440006.612  880213.224 -        0  880213.582 -        0  881107.464 -        0
+K2P+G4          -440202.051  880602.102 -        0  880602.453 -        0  881487.400 -        0
+SYM+I           -442142.982  884491.964 -        0  884492.344 -        0  885413.031 -        0
+HKY+F+I         -442365.724  884935.448 -        0  884935.821 -        0  885847.573 -        0
+K2P+I           -444065.924  888329.849 -        0  888330.200 -        0  889215.147 -        0
+F81+F+I+G4      -445543.628  891291.256 -        0  891291.629 -        0  892203.381 -        0
+F81+F+G4        -445725.937  891653.874 -        0  891654.239 -        0  892557.056 -        0
+JC+I+G4         -446396.638  892991.275 -        0  892991.626 -        0  893876.573 -        0
+JC+G4           -446582.926  893361.853 -        0  893362.196 -        0  894238.208 -        0
+F81+F+I         -449303.662  898809.325 -        0  898809.690 -        0  899712.508 -        0
+JC+I            -450365.988  900927.977 -        0  900928.320 -        0  901804.332 -        0
+GTR+F           -454721.717  909653.434 -        0  909653.828 -        0  910592.386 -        0
+SYM             -458484.414  917172.827 -        0  917173.199 -        0  918084.952 -        0
+HKY+F           -458495.410  917192.819 -        0  917193.185 -        0  918096.002 -        0
+K2P             -460642.943  921481.887 -        0  921482.231 -        0  922358.242 -        0
+F81+F           -465449.569  931099.139 -        0  931099.497 -        0  931993.379 -        0
+JC              -466795.978  933785.956 -        0  933786.293 -        0  934653.369 -        0
+
+AIC, w-AIC   : Akaike information criterion scores and weights.
+AICc, w-AICc : Corrected AIC scores and weights.
+BIC, w-BIC   : Bayesian information criterion scores and weights.
+
+Plus signs denote the 95% confidence sets.
+Minus signs denote significant exclusion.
+
+SUBSTITUTION PROCESS
+--------------------
+
+Model of substitution: GTR+F+I+G4
+
+Rate parameter R:
+
+  A-C: 1.6235
+  A-G: 2.3033
+  A-T: 0.3507
+  C-G: 1.0003
+  C-T: 2.4972
+  G-T: 1.0000
+
+State frequencies: (empirical counts from alignment)
+
+  pi(A) = 0.303
+  pi(C) = 0.1794
+  pi(G) = 0.208
+  pi(T) = 0.3096
+
+Rate matrix Q:
+
+  A   -0.8672    0.2873    0.4728    0.1071
+  C    0.4854    -1.454    0.2053    0.7628
+  G    0.6887     0.177    -1.171    0.3054
+  T    0.1048     0.442    0.2053   -0.7521
+
+Model of rate heterogeneity: Invar+Gamma with 4 categories
+Proportion of invariable sites: 0.2577
+Gamma shape alpha: 0.8918
+
+ Category  Relative_rate  Proportion
+  0         0              0.2577
+  1         0.1548         0.1856
+  2         0.595          0.1856
+  3         1.32           0.1856
+  4         3.32           0.1856
+Relative rates are computed as MEAN of the portion of the Gamma distribution falling in the category.
+
+MAXIMUM LIKELIHOOD TREE
+-----------------------
+
+Log-likelihood of the tree: -435074.4317 (s.e. 1860.0541)
+Unconstrained log-likelihood (without tree): -426239.6045
+Number of free parameters (#branches + #model parameters): 107
+Akaike information criterion (AIC) score: 870362.8634
+Corrected Akaike information criterion (AICc) score: 870363.2731
+Bayesian information criterion (BIC) score: 871319.7005
+
+Total tree length (sum of branch lengths): 1.4779
+Sum of internal branch lengths: 0.6794 (45.9686% of tree length)
+
+NOTE: Tree is UNROOTED although outgroup taxon 'Amborella_trichopoda' is drawn at root
+Numbers in parentheses are SH-aLRT support (%) / ultrafast bootstrap support (%)
+
+                                                +--Utricularia_foliosa
+                                             +--| (100/100)
+                                             |  |           +------Utricularia_macrorhiza
+                                             |  |        +--| (95.6/98)
+                                             |  |        |  +--Utricularia_australis
+                                             |  |     +--| (100/99)
+                                             |  |     |  +--Utricularia_tenuicaulis
+                                             |  |  +--| (99.1/99)
+                                             |  |  |  +--Utricularia_minor
+                                             |  +--| (100/100)
+                                             |     |  +--Utricularia_intermedia
+                                             |     +--| (100/100)
+                                             |        +--Utricularia_vulgaris
+                                          +--| (100/100)
+                                          |  +----------Utricularia_aurea
+                                       +--| (100/100)
+                                       |  +--Utricularia_gibba
+                                    +--| (100/100)
+                                    |  |  +-----Utricularia_cucullata
+                                    |  +--| (100/100)
+                                    |     +---Utricularia_flaccida
+                                 +--| (100/100)
+                                 |  |     +----Utricularia_amethystina
+                                 |  |  +--| (100/100)
+                                 |  |  |  +---Utricularia_hispida
+                                 |  +--| (100/100)
+                                 |     |    +--Utricularia_reniformis
+                                 |     +----| (100/100)
+                                 |          +--Utricularia_geminiloba
+                              +--| (100/100)
+                              |  |     +-----Utricularia_adpressa
+                              |  |  +--| (100/100)
+                              |  |  |  +-----------Utricularia_graminifolia
+                              |  +--| (99.9/100)
+                              |     +----Utricularia_arenaria
+                           +--| (100/100)
+                           |  |       +--Genlisea_margaretae
+                           |  |  +----| (100/100)
+                           |  |  |    |     +--Genlisea_aurea
+                           |  |  |    |  +--| (100/100)
+                           |  |  |    |  |  +--Genlisea_tuberosa
+                           |  |  |    +--| (100/100)
+                           |  |  |       |  +--Genlisea_filiformis
+                           |  |  |       +--| (100/100)
+                           |  |  |          |  +--Genlisea_pygmaea
+                           |  |  |          +--| (100/100)
+                           |  |  |             +--Genlisea_repens
+                           |  +--| (100/100)
+                           |     +----Genlisea_violacea
+              +------------| (100/100)
+              |            |        +--Pinguicula_ehlersiae
+              |            |     +--| (100/100)
+              |            |     |  +--Pinguicula_jackii
+              |            |  +--| (100/100)
+              |            |  |  +--Pinguicula_alpina
+              |            +--| (100/100)
+              |               +--Pinguicula_vulgaris
+           +--| (100/100)
+           |  |        +--Sarracenia_alata
+           |  |     +--| (100/100)
+           |  |     |  +--Heliamphora_minor
+           |  |  +--| (100/100)
+           |  |  |  +--Darlingtonia_californica
+           |  +--| (100/100)
+           |     +-----------Roridula_gorgonias
+        +--| (99.9/100)
+        |  |          +--Nepenthes_khasiana
+        |  |     +----| (100/100)
+        |  |     |    |     +--Nepenthes_mirabilis
+        |  |     |    |  +--| (100/100)
+        |  |     |    |  |  +--Nepenthes_gracilis
+        |  |     |    +--| (98.1/97)
+        |  |     |       +--Nepenthes_ventricosa_x_Nepenthes_alata
+        |  +-----| (100/100)
+        |        |                                    +--Drosera_peltata
+        |        |                        +-----------| (100/100)
+        |        |                        |           +--Drosera_erythrorhiza
+        |        |                     +--| (100/100)
+        |        |                     |  |                  +--Drosera_rotundifolia
+        |        |                     |  +------------------| (100/100)
+        |        |                     |                     +--Drosera_capensis
+        |        |                  +--| (80.6/82)
+        |        |                  |  +--Drosera_regia
+        |        |  +---------------| (100/100)
+        |        |  |               |  +-------Aldrovanda_vesiculosa
+        |        |  |               +--| (100/100)
+        |        |  |                  +------------Dionaea_muscipula
+        |        +--| (99.8/100)
+        |           |  +------Drosophyllum_lusitanicum
+        |           +--| (100/100)
+        |              +--------Triphyophyllum_peltatum
++-------| (100/100)
+|       +------------Cephalotus_follicularis
+|
++---------------Amborella_trichopoda
+|
+|          +--Brocchinia_acuminata
++----------| (100/100)
+           +--Brocchinia_hechtioides
+
+Tree in newick format:
+
+((((((((((((Utricularia_foliosa:0.0090860040,((((Utricularia_macrorhiza:0.0303549967,Utricularia_australis:0.0000620275)95.6/98:0.0004134195,Utricularia_tenuicaulis:0.0003398303)100/99:0.0010257165,Utricularia_minor:0.0013541983)99.1/99:0.0003952976,(Utricularia_intermedia:0.0008322498,Utricularia_vulgaris:0.0012365471)100/100:0.0025287402)100/100:0.0023779103)100/100:0.0031815648,Utricularia_aurea:0.0477608535)100/100:0.0061530069,Utricularia_gibba:0.0165838433)100/100:0.0100429655,(Utricularia_cucullata:0.0266349328,Utricularia_flaccida:0.0200323451)100/100:0.0126743963)100/100:0.0053184028,((Utricularia_amethystina:0.0246926485,Utricularia_hispida:0.0184134409)100/100:0.0041149643,(Utricularia_reniformis:0.0016440776,Utricularia_geminiloba:0.0018926502)100/100:0.0237598417)100/100:0.0026884843)100/100:0.0032562667,((Utricularia_adpressa:0.0276989943,Utricularia_graminifolia:0.0527474953)100/100:0.0142757588,Utricularia_arenaria:0.0242017505)99.9/100:0.0014738048)100/100:0.0135003089,((Genlisea_margaretae:0.0101163356,((Genlisea_aurea:0.0010986062,Genlisea_tuberosa:0.0019422693)100/100:0.0055611112,(Genlisea_filiformis:0.0038413629,(Genlisea_pygmaea:0.0004507041,Genlisea_repens:0.0007222939)100/100:0.0015076609)100/100:0.0026529499)100/100:0.0100454936)100/100:0.0256028044,Genlisea_violacea:0.0220444779)100/100:0.0078474352)100/100:0.0149376079,(((Pinguicula_ehlersiae:0.0077545420,Pinguicula_jackii:0.0022373641)100/100:0.0035412536,Pinguicula_alpina:0.0046606418)100/100:0.0009597433,Pinguicula_vulgaris:0.0049851016)100/100:0.0145464423)100/100:0.0563999648,(((Sarracenia_alata:0.0089597111,Heliamphora_minor:0.0039961181)100/100:0.0055558599,Darlingtonia_californica:0.0102516486)100/100:0.0101062464,Roridula_gorgonias:0.0525433891)100/100:0.0133240821)100/100:0.0112796538,((Nepenthes_khasiana:0.0029116452,((Nepenthes_mirabilis:0.0001659229,Nepenthes_gracilis:0.0008496506)100/100:0.0019061542,Nepenthes_ventricosa_x_Nepenthes_alata:0.0028294018)98.1/97:0.0009426706)100/100:0.0226758056,(((((Drosera_peltata:0.0057416146,Drosera_erythrorhiza:0.0085205505)100/100:0.0537149103,(Drosera_rotundifolia:0.0105552838,Drosera_capensis:0.0143964688)100/100:0.0850186012)100/100:0.0171140093,Drosera_regia:0.0129143148)80.6/82:0.0016290380,(Aldrovanda_vesiculosa:0.0348112502,Dionaea_muscipula:0.0559134949)100/100:0.0046209933)100/100:0.0700883460,(Drosophyllum_lusitanicum:0.0329807728,Triphyophyllum_peltatum:0.0397399067)100/100:0.0105586342)99.8/100:0.0029950869)100/100:0.0285200121)99.9/100:0.0033650254,Cephalotus_follicularis:0.0575782059)100/100:0.0346041049,Amborella_trichopoda:0.0714036573,(Brocchinia_acuminata:0.0021220568,Brocchinia_hechtioides:0.0039445271)100/100:0.0505869950);
+
+CONSENSUS TREE
+--------------
+
+Consensus tree is constructed from 1000 bootstrap trees
+Log-likelihood of consensus tree: -435074.431823
+Robinson-Foulds distance between ML tree and consensus tree: 0
+
+Branches with support >0.000000% are kept (extended consensus)
+Branch lengths are optimized by maximum likelihood on original alignment
+Numbers in parentheses are bootstrap supports (%)
+
+                                                +--Utricularia_foliosa
+                                             +--| (100)
+                                             |  |           +------Utricularia_macrorhiza
+                                             |  |        +--| (98)
+                                             |  |        |  +--Utricularia_australis
+                                             |  |     +--| (99)
+                                             |  |     |  +--Utricularia_tenuicaulis
+                                             |  |  +--| (99)
+                                             |  |  |  +--Utricularia_minor
+                                             |  +--| (100)
+                                             |     |  +--Utricularia_intermedia
+                                             |     +--| (100)
+                                             |        +--Utricularia_vulgaris
+                                          +--| (100)
+                                          |  +----------Utricularia_aurea
+                                       +--| (100)
+                                       |  +--Utricularia_gibba
+                                    +--| (100)
+                                    |  |  +-----Utricularia_cucullata
+                                    |  +--| (100)
+                                    |     +---Utricularia_flaccida
+                                 +--| (100)
+                                 |  |     +----Utricularia_amethystina
+                                 |  |  +--| (100)
+                                 |  |  |  +---Utricularia_hispida
+                                 |  +--| (100)
+                                 |     |    +--Utricularia_reniformis
+                                 |     +----| (100)
+                                 |          +--Utricularia_geminiloba
+                              +--| (100)
+                              |  |     +-----Utricularia_adpressa
+                              |  |  +--| (100)
+                              |  |  |  +-----------Utricularia_graminifolia
+                              |  +--| (100)
+                              |     +----Utricularia_arenaria
+                           +--| (100)
+                           |  |       +--Genlisea_margaretae
+                           |  |  +----| (100)
+                           |  |  |    |     +--Genlisea_aurea
+                           |  |  |    |  +--| (100)
+                           |  |  |    |  |  +--Genlisea_tuberosa
+                           |  |  |    +--| (100)
+                           |  |  |       |  +--Genlisea_filiformis
+                           |  |  |       +--| (100)
+                           |  |  |          |  +--Genlisea_pygmaea
+                           |  |  |          +--| (100)
+                           |  |  |             +--Genlisea_repens
+                           |  +--| (100)
+                           |     +----Genlisea_violacea
+              +------------| (100)
+              |            |        +--Pinguicula_ehlersiae
+              |            |     +--| (100)
+              |            |     |  +--Pinguicula_jackii
+              |            |  +--| (100)
+              |            |  |  +--Pinguicula_alpina
+              |            +--| (100)
+              |               +--Pinguicula_vulgaris
+           +--| (100)
+           |  |        +--Sarracenia_alata
+           |  |     +--| (100)
+           |  |     |  +--Heliamphora_minor
+           |  |  +--| (100)
+           |  |  |  +--Darlingtonia_californica
+           |  +--| (100)
+           |     +-----------Roridula_gorgonias
+        +--| (100)
+        |  |          +--Nepenthes_khasiana
+        |  |     +----| (100)
+        |  |     |    |     +--Nepenthes_mirabilis
+        |  |     |    |  +--| (100)
+        |  |     |    |  |  +--Nepenthes_gracilis
+        |  |     |    +--| (97)
+        |  |     |       +--Nepenthes_ventricosa_x_Nepenthes_alata
+        |  +-----| (100)
+        |        |                                    +--Drosera_peltata
+        |        |                        +-----------| (100)
+        |        |                        |           +--Drosera_erythrorhiza
+        |        |                     +--| (100)
+        |        |                     |  |                  +--Drosera_rotundifolia
+        |        |                     |  +------------------| (100)
+        |        |                     |                     +--Drosera_capensis
+        |        |                  +--| (82)
+        |        |                  |  +--Drosera_regia
+        |        |  +---------------| (100)
+        |        |  |               |  +-------Aldrovanda_vesiculosa
+        |        |  |               +--| (100)
+        |        |  |                  +------------Dionaea_muscipula
+        |        +--| (100)
+        |           |  +------Drosophyllum_lusitanicum
+        |           +--| (100)
+        |              +--------Triphyophyllum_peltatum
++-------| (100)
+|       +------------Cephalotus_follicularis
+|
++---------------Amborella_trichopoda
+|
+|          +--Brocchinia_acuminata
++----------| (100)
+           +--Brocchinia_hechtioides
+
+
+Consensus tree in newick format: 
+
+((((((((((((Utricularia_foliosa:0.0090848975,((((Utricularia_macrorhiza:0.0303513179,Utricularia_australis:0.0000602995)98:0.0004152283,Utricularia_tenuicaulis:0.0003405829)99:0.0010259018,Utricularia_minor:0.0013540105)99:0.0003951428,(Utricularia_intermedia:0.0008327088,Utricularia_vulgaris:0.0012363862)100:0.0025288837)100:0.0023780496)100:0.0031823140,Utricularia_aurea:0.0477551120)100:0.0061527990,Utricularia_gibba:0.0165819754)100:0.0100416681,(Utricularia_cucullata:0.0266321703,Utricularia_flaccida:0.0200301968)100:0.0126732485)100:0.0053186277,((Utricularia_amethystina:0.0246901266,Utricularia_hispida:0.0184115485)100:0.0041144945,(Utricularia_reniformis:0.0016443754,Utricularia_geminiloba:0.0018919947)100:0.0237574101)100:0.0026885521)100:0.0032563643,((Utricularia_adpressa:0.0276961071,Utricularia_graminifolia:0.0527421203)100:0.0142753860,Utricularia_arenaria:0.0241994816)100:0.0014731957)100:0.0134993044,((Genlisea_margaretae:0.0101153443,((Genlisea_aurea:0.0010987695,Genlisea_tuberosa:0.0019425992)100:0.0055611562,(Genlisea_filiformis:0.0038405865,(Genlisea_pygmaea:0.0004504226,Genlisea_repens:0.0007223246)100:0.0015079179)100:0.0026520877)100:0.0100444078)100:0.0256005522,Genlisea_violacea:0.0220422557)100:0.0078473915)100:0.0149364587,(((Pinguicula_ehlersiae:0.0077546715,Pinguicula_jackii:0.0022381663)100:0.0035409972,Pinguicula_alpina:0.0046607298)100:0.0009591905,Pinguicula_vulgaris:0.0049850906)100:0.0145451798)100:0.0563951361,(((Sarracenia_alata:0.0089597856,Heliamphora_minor:0.0039953708)100:0.0055559183,Darlingtonia_californica:0.0102516969)100:0.0101063199,Roridula_gorgonias:0.0525390766)100:0.0133240190)100:0.0112789833,((Nepenthes_khasiana:0.0029120553,((Nepenthes_mirabilis:0.0001651954,Nepenthes_gracilis:0.0008502860)100:0.0019065693,Nepenthes_ventricosa_x_Nepenthes_alata:0.0028300156)97:0.0009432225)100:0.0226743289,(((((Drosera_peltata:0.0057412173,Drosera_erythrorhiza:0.0085206223)100:0.0537116676,(Drosera_rotundifolia:0.0105552105,Drosera_capensis:0.0143964688)100:0.0850147349)100:0.0171160709,Drosera_regia:0.0129149566)82:0.0016281752,(Aldrovanda_vesiculosa:0.0348095043,Dionaea_muscipula:0.0559107492)100:0.0046212007)100:0.0700846261,(Drosophyllum_lusitanicum:0.0329786969,Triphyophyllum_peltatum:0.0397372080)100:0.0105584858)100:0.0029957532)100:0.0285182688)100:0.0033658395,Cephalotus_follicularis:0.0575733739)100:0.0346023407,Amborella_trichopoda:0.0713987183,(Brocchinia_acuminata:0.0021221000,Brocchinia_hechtioides:0.0039445484)100:0.0505832887);
+
+TIME STAMP
+----------
+
+Date and time: Thu Nov  5 14:19:33 2026
+Total CPU time used: 1124.411771 seconds (0h:18m:44s)
+Total wall-clock time used: 580.6224106 seconds (0h:9m:40s)
+

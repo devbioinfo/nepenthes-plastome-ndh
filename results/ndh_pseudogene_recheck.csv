@@ -1,0 +1,88 @@
+species,gene,coverage,call,note
+Cephalotus follicularis,ndhB,0.92,F,"intron gene; HSP stops=0, frames=['-1', '-2']"
+Cephalotus follicularis,ndhE,0.00,P,no HSP with identity >= 50%
+Cephalotus follicularis,ndhG,0.67,P,"HSP stops=5, frames=['2'], ORF=0 nt (0.00 ref)"
+Drosera rotundifolia,ndhB,0.27,P,"intron gene; HSP stops=2, frames=['-3']"
+Drosophyllum lusitanicum,ndhD,0.62,P,"HSP stops=5, frames=['-1', '-2', '-3'], ORF=0 nt (0.00 ref)"
+Drosophyllum lusitanicum,ndhF,0.10,P,"HSP stops=0, frames=['-1'], ORF=225 nt (0.10 ref)"
+Genlisea aurea,ndhB,1.00,P,"intron gene; HSP stops=10, frames=['-1', '-2', '-3']"
+Genlisea aurea,ndhC,0.00,P,no HSP with identity >= 50%
+Genlisea aurea,ndhK,0.63,P,"HSP stops=1, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Genlisea filiformis,ndhB,0.99,P,"intron gene; HSP stops=3, frames=['-1', '-2', '-3']"
+Genlisea filiformis,ndhC,0.00,P,no HSP with identity >= 50%
+Genlisea filiformis,ndhE,0.00,P,no HSP with identity >= 50%
+Genlisea filiformis,ndhI,0.00,P,no HSP with identity >= 50%
+Genlisea filiformis,ndhK,0.26,P,"HSP stops=0, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Genlisea margaretae,ndhB,0.96,P,"intron gene; HSP stops=3, frames=['-1', '-2', '-3']"
+Genlisea pygmaea,ndhB,0.93,P,"intron gene; HSP stops=3, frames=['-1', '-2', '-3']"
+Genlisea pygmaea,ndhC,0.00,P,no HSP with identity >= 50%
+Genlisea pygmaea,ndhE,0.00,P,no HSP with identity >= 50%
+Genlisea pygmaea,ndhK,0.26,P,"HSP stops=0, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Genlisea repens,ndhB,0.93,P,"intron gene; HSP stops=3, frames=['-1', '-2', '-3']"
+Genlisea repens,ndhC,0.00,P,no HSP with identity >= 50%
+Genlisea repens,ndhE,0.00,P,no HSP with identity >= 50%
+Genlisea repens,ndhK,0.26,P,"HSP stops=0, frames=['-1', '-3'], ORF=0 nt (0.00 ref)"
+Genlisea tuberosa,ndhB,1.00,P,"intron gene; HSP stops=10, frames=['-1', '-2', '-3']"
+Genlisea tuberosa,ndhC,0.00,P,no HSP with identity >= 50%
+Genlisea tuberosa,ndhI,0.00,P,no HSP with identity >= 50%
+Genlisea tuberosa,ndhK,0.26,P,"HSP stops=0, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Genlisea violacea,ndhB,1.00,P,"intron gene; HSP stops=1, frames=['-1', '-2']"
+Genlisea violacea,ndhC,0.50,P,"HSP stops=0, frames=['-3'], ORF=0 nt (0.00 ref)"
+Genlisea violacea,ndhD,0.22,P,"HSP stops=1, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Genlisea violacea,ndhE,0.00,P,no HSP with identity >= 50%
+Genlisea violacea,ndhJ,0.41,P,"HSP stops=2, frames=['-3'], ORF=0 nt (0.00 ref)"
+Pinguicula alpina,ndhA,0.49,P,"intron gene; HSP stops=0, frames=['-1', '-3']"
+Pinguicula alpina,ndhD,0.32,P,"HSP stops=1, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Pinguicula alpina,ndhE,1.00,P,"HSP stops=5, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Pinguicula alpina,ndhI,1.00,P,"HSP stops=3, frames=['-1'], ORF=0 nt (0.00 ref)"
+Pinguicula alpina,ndhK,0.38,P,"HSP stops=0, frames=['-3'], ORF=384 nt (0.57 ref)"
+Pinguicula ehlersiae,ndhA,0.63,P,"intron gene; HSP stops=4, frames=['-2', '-3']"
+Pinguicula ehlersiae,ndhD,0.33,P,"HSP stops=2, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Pinguicula ehlersiae,ndhE,0.76,P,"HSP stops=0, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Pinguicula ehlersiae,ndhG,0.68,P,"HSP stops=0, frames=['-2'], ORF=462 nt (0.87 ref)"
+Pinguicula ehlersiae,ndhH,1.00,P,"HSP stops=0, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Pinguicula ehlersiae,ndhI,0.88,P,"HSP stops=2, frames=['-3'], ORF=0 nt (0.00 ref)"
+Pinguicula jackii,ndhA,0.11,P,"intron gene; HSP stops=1, frames=['-2']"
+Pinguicula jackii,ndhD,0.87,P,"HSP stops=3, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Pinguicula jackii,ndhE,0.00,P,no HSP with identity >= 50%
+Pinguicula jackii,ndhG,0.89,P,"HSP stops=1, frames=['-3'], ORF=0 nt (0.00 ref)"
+Pinguicula jackii,ndhH,0.51,P,"HSP stops=0, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Pinguicula jackii,ndhK,0.46,P,"HSP stops=0, frames=['-1'], ORF=0 nt (0.00 ref)"
+Pinguicula vulgaris,ndhD,0.54,P,"HSP stops=6, frames=['-1', '-3'], ORF=0 nt (0.00 ref)"
+Pinguicula vulgaris,ndhE,0.96,P,"HSP stops=4, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Pinguicula vulgaris,ndhF,0.52,P,"HSP stops=2, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Pinguicula vulgaris,ndhG,0.89,P,"HSP stops=3, frames=['-3'], ORF=0 nt (0.00 ref)"
+Pinguicula vulgaris,ndhI,0.98,P,"HSP stops=0, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Pinguicula vulgaris,ndhK,1.00,P,"HSP stops=4, frames=['-1', '-2', '-3'], ORF=0 nt (0.00 ref)"
+Sarracenia alata,ndhC,0.90,F,"HSP stops=0, frames=['-2'], ORF=411 nt (1.13 ref)"
+Sarracenia alata,ndhG,0.89,P,"HSP stops=2, frames=['-2'], ORF=0 nt (0.00 ref)"
+Sarracenia alata,ndhI,0.51,P,"HSP stops=0, frames=['-1'], ORF=315 nt (0.58 ref)"
+Sarracenia alata,ndhJ,0.99,P,"HSP stops=1, frames=['-1', '-2', '-3'], ORF=0 nt (0.00 ref)"
+Sarracenia alata,ndhK,0.89,P,"HSP stops=0, frames=['-1', '-3'], ORF=0 nt (0.00 ref)"
+Utricularia adpressa,ndhB,0.44,P,"intron gene; HSP stops=0, frames=['-1', '-2', '-3']"
+Utricularia adpressa,ndhI,0.00,P,no HSP with identity >= 50%
+Utricularia cucullata,ndhA,0.49,P,"intron gene; HSP stops=6, frames=['-2', '-3']"
+Utricularia cucullata,ndhD,0.50,P,"HSP stops=7, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Utricularia cucullata,ndhE,0.51,P,"HSP stops=1, frames=['-2'], ORF=0 nt (0.00 ref)"
+Utricularia cucullata,ndhG,0.58,P,"HSP stops=3, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Utricularia cucullata,ndhH,0.29,P,"HSP stops=0, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Utricularia cucullata,ndhI,0.80,P,"HSP stops=3, frames=['-1', '-2'], ORF=0 nt (0.00 ref)"
+Utricularia cucullata,ndhJ,0.00,P,no HSP with identity >= 50%
+Utricularia geminiloba,ndhA,0.85,P,"intron gene; HSP stops=3, frames=['-1', '-2', '-3']"
+Utricularia geminiloba,ndhB,0.71,P,"intron gene; HSP stops=1, frames=['-1', '-2']"
+Utricularia geminiloba,ndhD,0.00,P,no HSP with identity >= 50%
+Utricularia geminiloba,ndhE,0.00,P,no HSP with identity >= 50%
+Utricularia geminiloba,ndhG,0.86,P,"HSP stops=3, frames=['-1', '-3'], ORF=0 nt (0.00 ref)"
+Utricularia geminiloba,ndhH,0.44,P,"HSP stops=5, frames=['-1'], ORF=0 nt (0.00 ref)"
+Utricularia geminiloba,ndhI,0.92,P,"HSP stops=0, frames=['-2', '-3'], ORF=0 nt (0.00 ref)"
+Utricularia graminifolia,ndhB,0.44,P,"intron gene; HSP stops=1, frames=['-1', '-2']"
+Utricularia graminifolia,ndhD,0.00,P,no HSP with identity >= 50%
+Utricularia graminifolia,ndhF,0.00,P,no HSP with identity >= 50%
+Utricularia macrorhiza,ndhG,0.89,F,"HSP stops=0, frames=['-1'], ORF=531 nt (1.00 ref)"
+Utricularia reniformis,ndhA,0.82,P,"intron gene; HSP stops=4, frames=['1', '2']"
+Utricularia reniformis,ndhB,0.71,P,"intron gene; HSP stops=2, frames=['2', '3']"
+Utricularia reniformis,ndhD,0.43,P,"HSP stops=5, frames=['1', '3'], ORF=0 nt (0.00 ref)"
+Utricularia reniformis,ndhE,0.00,P,no HSP with identity >= 50%
+Utricularia reniformis,ndhG,0.85,P,"HSP stops=5, frames=['1', '3'], ORF=0 nt (0.00 ref)"
+Utricularia reniformis,ndhH,0.00,P,no HSP with identity >= 50%
+Utricularia reniformis,ndhI,0.95,P,"HSP stops=0, frames=['1', '2', '3'], ORF=0 nt (0.00 ref)"
