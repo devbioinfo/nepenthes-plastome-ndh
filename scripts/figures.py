@@ -284,21 +284,29 @@ def fig2a(out):
     fig.savefig(out, bbox_inches='tight'); plt.close(fig)
 
 
-# ---------------- Figure 2A, classic style (collapsed clades, as in the original figure) ----------------
-CLADES = [  # (label, genus prefixes, fill colour, trap label)
-    ('Lentibulariaceae', ('Utricularia',), '#c9c9c9', 'Suction trap'),
-    ('Lentibulariaceae', ('Genlisea',), '#8fdcec', 'Eel trap'),
-    ('Lentibulariaceae', ('Pinguicula',), '#a8d982', 'Adhesive trap'),
-    ('Sarraceniaceae', ('Sarracenia', 'Heliamphora', 'Darlingtonia'), '#c3b5ec', 'Pitfall trap'),
-    ('Droseraceae', ('Drosera', 'Dionaea', 'Aldrovanda'), '#f6b3bd', 'Snap / adhesive traps'),
-    ('Nepenthaceae', ('Nepenthes',), '#f7b54a', 'Pitfall trap'),
-    ('Bromeliaceae', ('Brocchinia',), '#ef7d7c', 'Pitfall trap'),
+# ---------------- Figure 2A, classic style (collapsed clades, original colour coding and trap icons) ----------------
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+ICON = {k: plt.imread(f'figures/icons/{k}.png') for k in ('eel', 'suction', 'flypaper', 'pitfall', 'snap')}
+TRAPNAME = {'eel': 'Eel (lobster-pot) trap', 'suction': 'Suction (bladder) trap', 'flypaper': 'Adhesive (flypaper) trap',
+            'pitfall': 'Pitfall trap', 'tank': 'Pitfall (tank) trap', 'snap': 'Snap trap'}
+ICON['tank'] = ICON['pitfall']; ICON['snap_d'] = ICON['snap']; ICON['fly_d'] = ICON['flypaper']
+TRAPNAME['snap_d'] = r'Snap trap ($\it{Dionaea}$, $\it{Aldrovanda}$)'
+TRAPNAME['fly_d'] = r'Adhesive (flypaper) trap ($\it{Drosera}$)'
+# (family label, genus prefixes, triangle fill, text colour, traps) - colours follow the original figure
+CLADES = [
+    ('Lentibulariaceae', ('Utricularia',), '#ddd0d0', '#1a1a1a', ['suction']),
+    ('Lentibulariaceae', ('Genlisea',), '#d6f3fb', '#1f9fd0', ['eel']),
+    ('Lentibulariaceae', ('Pinguicula',), '#d7f0c6', '#5d9e3a', ['flypaper']),
+    ('Sarraceniaceae', ('Sarracenia', 'Heliamphora', 'Darlingtonia'), '#d9d1f4', '#5b4bc4', ['pitfall']),
+    ('Droseraceae', ('Drosera', 'Dionaea', 'Aldrovanda'), '#f9d3d9', '#b03a4e', ['snap_d', 'fly_d']),
+    ('Nepenthaceae', ('Nepenthes',), '#f7aa2c', '#e07f00', ['pitfall']),
+    ('Bromeliaceae', ('Brocchinia',), '#ea4a1e', '#c8300c', ['tank']),
 ]
-SINGLE = {'Roridula_gorgonias': ('Roridulaceae', '#c2398a', 'Flypaper trap'),
-          'Drosophyllum_lusitanicum': ('Drosophyllaceae', '#2a5bd6', 'Adhesive trap'),
-          'Triphyophyllum_peltatum': ('Dioncophyllaceae', '#2a5bd6', 'Adhesive trap'),
-          'Cephalotus_follicularis': ('Cephalotaceae', '#d08a16', 'Pitfall trap'),
-          'Amborella_trichopoda': ('Amborellaceae (outgroup)', '#2f6b2f', '')}
+SINGLE = {'Roridula_gorgonias': ('Roridulaceae', '#a926b0', ['flypaper']),
+          'Drosophyllum_lusitanicum': ('Drosophyllaceae', '#1f4e9e', ['flypaper']),
+          'Triphyophyllum_peltatum': ('Dioncophyllaceae', '#1f4e9e', ['flypaper']),
+          'Cephalotus_follicularis': ('Cephalotaceae', '#9a4f1c', ['pitfall']),
+          'Amborella_trichopoda': ('Amborellaceae (outgroup)', '#2e7d32', [])}
 
 
 def fig2a_classic(out):
@@ -306,82 +314,84 @@ def fig2a_classic(out):
     tr.root_with_outgroup('Amborella_trichopoda'); tr.ladderize(reverse=True)
     depths = tr.depths()
     parent = {id(ch): c for c in tr.find_clades() for ch in c.clades}
-
-    def sup(c):
-        lab = c.name or ''
-        if '/' not in lab or c is tr.root:
-            return
-        ufb = float(lab.split('/')[1])
-        p = parent.get(id(c))
-        x = (depths[p] + depths[c]) / 2 if p is not None else depths[c]
-        ax.text(x, y[c] - 0.22, f'{ufb:.0f}%', ha='center', va='bottom', fontsize=4.8, color=INK2,
-                bbox=dict(boxstyle='square,pad=0.05', fc='white', ec='none'), zorder=4)
     mrca = {}
-    for lab, pre, col, trap in CLADES:
+    for lab, pre, fill, tcol, traps in CLADES:
         tips = [x for x in tr.get_terminals() if x.name.startswith(pre)]
-        mrca[id(tr.common_ancestor(tips))] = (lab, col, trap, tips)
+        mrca[id(tr.common_ancestor(tips))] = (lab, fill, tcol, traps)
     y = {}; rows = []; cur = [0.0]
+
     def place(c):
         if id(c) in mrca:
-            lab, col, trap, tips = mrca[id(c)]
-            order = [t for t in c.get_terminals()]
+            order = c.get_terminals()
             h = max(len(order), 2) * 0.62 + 0.6
-            y[c] = cur[0] + h / 2
-            rows.append(('clade', c, cur[0], cur[0] + h, order)); cur[0] += h + 0.5
+            y[c] = cur[0] + h / 2; rows.append(('clade', c, cur[0], cur[0] + h, order)); cur[0] += h + 0.6
             return y[c]
         if c.is_terminal():
-            y[c] = cur[0] + 0.6; rows.append(('tip', c, cur[0], cur[0] + 1.2, [c])); cur[0] += 1.8
+            y[c] = cur[0] + 0.6; rows.append(('tip', c, cur[0], cur[0] + 1.2, [c])); cur[0] += 1.9
             return y[c]
         ys = [place(ch) for ch in c.clades]
         y[c] = (min(ys) + max(ys)) / 2
         return y[c]
     place(tr.root)
-    H = cur[0]
-    xmax = max(depths.values())
-    fig = plt.figure(figsize=(6.4, 7.6))
+    H = cur[0]; xmax = max(depths.values())
+    fig = plt.figure(figsize=(7.4, 7.8))
     ax = fig.add_axes([0.02, 0.05, 0.96, 0.92])
+    stemcol = {}
+    for kind, c, *_ in rows:
+        stemcol[id(c)] = (mrca[id(c)][2] if kind == 'clade' else SINGLE[c.name][1])
+
+    def sup(c):
+        lab = c.name or ''
+        if '/' not in lab or c is tr.root:
+            return
+        p = parent.get(id(c))
+        x = (depths[p] + depths[c]) / 2 if p is not None else depths[c]
+        ax.text(x, y[c] - 0.22, f"{float(lab.split('/')[1]):.0f}%", ha='center', va='bottom', fontsize=4.8, color=INK2,
+                bbox=dict(boxstyle='square,pad=0.05', fc='white', ec='none'), zorder=4)
+
     def draw(c):
         if id(c) in mrca or c.is_terminal():
             return
-        x1 = depths[c]
-        ys = [y[ch] for ch in c.clades]
+        x1 = depths[c]; ys = [y[ch] for ch in c.clades]
         ax.plot([x1, x1], [min(ys), max(ys)], color=INK, lw=0.9)
         for ch in c.clades:
-            ax.plot([x1, depths[ch]], [y[ch], y[ch]], color=INK, lw=0.9)
+            col = stemcol.get(id(ch), INK)
+            ax.plot([x1, depths[ch]], [y[ch], y[ch]], color=col if col != '#1a1a1a' else INK, lw=1.1 if id(ch) in stemcol else 0.9)
             draw(ch)
-        sup(c)
-        ax.plot(x1, y[c], 'o', ms=1.8, color=INK)
+        sup(c); ax.plot(x1, y[c], 'o', ms=1.8, color=INK)
     draw(tr.root)
-    lx = xmax * 1.04
+
+    def icon(name, xy, zoom=0.2):
+        ax.add_artist(AnnotationBbox(OffsetImage(ICON[name], zoom=zoom), xy, frameon=False, box_alignment=(0, 0.5)))
+
+    lx = xmax * 1.04; ix = lx + xmax * 0.64; fx = ix + xmax * 0.74
+    def traps_at(traps, yc):
+        n = len(traps)
+        for k, tp in enumerate(traps):
+            yy = yc + (k - (n - 1) / 2) * 1.35
+            icon(tp, (ix, yy)); ax.text(ix + xmax * 0.10, yy, TRAPNAME[tp], va='center', fontsize=5.8, color='#1c3f94')
     for kind, c, y0, y1, tips in rows:
         if kind == 'clade':
-            lab, col, trap, _ = mrca[id(c)]
+            lab, fill, tcol, traps = mrca[id(c)]
             x0 = depths[c]; xe = max(depths[t] for t in tips)
-            ax.add_patch(plt.Polygon([[x0, y[c]], [xe, y0 + 0.2], [xe, y1 - 0.2]], closed=True, fc=col, ec=col, lw=0.6, alpha=0.9))
-            sup(c)
-            ax.plot(x0, y[c], 'o', ms=1.8, color=INK)
-            step = (y1 - y0 - 0.6) / max(len(tips) - 1, 1) if len(tips) > 1 else 0
+            ax.add_patch(plt.Polygon([[x0, y[c]], [xe, y0 + 0.2], [xe, y1 - 0.2]], closed=True, fc=fill, ec=fill, lw=0.6))
+            sup(c); ax.plot(x0, y[c], 'o', ms=1.8, color=INK)
+            step = (y1 - y0 - 0.6) / max(len(tips) - 1, 1)
             for k, t in enumerate(tips):
-                yy = y0 + 0.3 + k * step if len(tips) > 1 else y[c]
-                ax.text(lx, yy, pretty(t.name), va='center', fontsize=5.6, style='italic', color=INK)
-            ax.plot([lx + xmax * 0.62] * 2, [y0 + 0.2, y1 - 0.2], color=INK2, lw=0.6)
-            ax.text(lx + xmax * 0.65, y[c] - 0.35, lab, va='center', fontsize=7, weight='bold', color=INK)
-            ax.text(lx + xmax * 0.65, y[c] + 0.55, trap, va='center', fontsize=5.8, color='#1c5cab',
-                    bbox=dict(boxstyle='round,pad=0.25', fc='white', ec='#1c5cab', lw=0.5))
+                ax.text(lx, y0 + 0.3 + k * step, pretty(t.name), va='center', fontsize=5.6, style='italic', color=tcol)
+            ax.plot([fx - xmax * 0.03] * 2, [y0 + 0.2, y1 - 0.2], color=tcol, lw=0.8)
+            ax.text(fx, y[c], lab, va='center', fontsize=7, weight='bold', color=tcol)
+            traps_at(traps, y[c])
         else:
-            fam, col, trap = SINGLE[c.name]
-            ax.plot([depths[c.clades[0]] if False else depths[c]] * 1, [y[c]], 's', ms=3.2, color=col)
-            ax.text(lx, y[c], pretty(c.name), va='center', fontsize=5.6, style='italic', color=INK)
-            ax.text(lx + xmax * 0.65, y[c], fam, va='center', fontsize=7, weight='bold', color=INK)
-            if trap:
-                ax.annotate(trap, xy=(lx + xmax * 0.65, y[c]), xytext=(len(fam) * 5.0 + 6, 0), textcoords='offset points',
-                            va='center', fontsize=5.8, color='#1c5cab',
-                            bbox=dict(boxstyle='round,pad=0.25', fc='white', ec='#1c5cab', lw=0.5))
-    # dotted leaders from terminals/triangles to names
+            fam, col, traps = SINGLE[c.name]
+            ax.plot(depths[c], y[c], 's', ms=3.2, color=col)
+            ax.text(lx, y[c], pretty(c.name), va='center', fontsize=5.6, style='italic', color=col)
+            ax.text(fx, y[c], fam, va='center', fontsize=7, weight='bold', color=col)
+            traps_at(traps, y[c])
     for kind, c, y0, y1, tips in rows:
         xe = max(depths[t] for t in tips)
         ax.plot([xe + xmax * 0.01, lx - xmax * 0.01], [y[c], y[c]], color=GRID, lw=0.5, ls=(0, (1, 2)))
-    ax.set_xlim(-xmax * 0.02, xmax * 2.25); ax.set_ylim(H + 1.5, -0.8)
+    ax.set_xlim(-xmax * 0.02, xmax * 2.95); ax.set_ylim(H + 1.5, -0.8)
     ax.plot([0, 0.05], [H + 0.6] * 2, color=INK, lw=0.8)
     ax.text(0.0, H + 1.4, '0.05 substitutions/site', fontsize=5.5, color=INK2)
     ax.axis('off')
