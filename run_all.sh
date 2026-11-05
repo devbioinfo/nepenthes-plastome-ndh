@@ -33,6 +33,7 @@ python3 scripts/build_cds_alignment.py "${GB[@]}" --outdir results/phylogeny
 python3 scripts/kmer_distance.py "${GB[@]}" --k 15 --outdir results/kmer
 python3 scripts/plastome_ani.py "${GB[@]}" --outdir results/ani
 python3 scripts/rscu_pca.py "${GB[@]}" --outdir results/codon
+python3 scripts/enc_gc3.py "${GB[@]}" --out results/codon/enc_gc3.csv
 python3 scripts/dnds_ng86.py "${GB[@]}" --curated results/ndh_status_curated.csv --outdir results/dnds
 
 # 4. figures

@@ -27,6 +27,7 @@ Requirements: Python ≥ 3.9 with numpy, scipy, pandas, matplotlib, biopython an
 | 15-mer Mash distances and neighbour-joining tree | `scripts/kmer_distance.py` | `results/kmer/` | Figure 3 |
 | Whole-plastome ANIb (1,020-nt fragments, dc-megablast) and UPGMA | `scripts/plastome_ani.py` | `results/ani/` | Figure 6 |
 | RSCU (59 codons) and PCA | `scripts/rscu_pca.py` | `results/codon/` | Figure 5 |
+| ENC and GC3s vs. Wright (1990) expectation | `scripts/enc_gc3.py` | `results/codon/enc_gc3.csv` | Figure 5C |
 | dN, dS, dN/dS vs *N. khasiana* (Nei–Gojobori, Biopython) | `scripts/dnds_ng86.py` | `results/dnds/` | Figure S1 |
 | Figures | `scripts/figures.py`, `scripts/compose_fig2.py` | `figures/` | Figures 2, 3, 5, 6, S1 |
 
