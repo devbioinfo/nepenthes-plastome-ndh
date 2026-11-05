@@ -556,13 +556,175 @@ def fig3_illustrated(out):
     fig.savefig(out, bbox_inches='tight', dpi=300); plt.close(fig)
 
 
+# ---------------- Figure 5, Nature-style multi-panel codon-usage figure ----------------
+from matplotlib.patches import Ellipse
+from matplotlib.gridspec import GridSpec
+FAMCOL = {'Lentibulariaceae': '#2e9e45', 'Sarraceniaceae': '#4a4ad0', 'Roridulaceae': '#d0137f', 'Droseraceae': '#17a2b8',
+          'Nepenthaceae': '#8b1a1a', 'Drosophyllaceae': '#1f3fd6', 'Dioncophyllaceae': '#6f86ff', 'Cephalotaceae': '#f08a00',
+          'Bromeliaceae': '#b8962a', 'Amborellaceae': '#555555'}
+
+
+def conf_ellipse(ax, x, y, col, n_std=2.4477):  # 95% for 2 d.f.
+    cov = np.cov(x, y); vals, vecs = np.linalg.eigh(cov)
+    order = vals.argsort()[::-1]; vals, vecs = vals[order], vecs[:, order]
+    ang = np.degrees(np.arctan2(*vecs[:, 0][::-1]))
+    w, h = 2 * n_std * np.sqrt(vals)
+    ax.add_patch(Ellipse((x.mean(), y.mean()), w, h, angle=ang, fc=col, ec=col, alpha=0.12, lw=0.8, zorder=1))
+    ax.add_patch(Ellipse((x.mean(), y.mean()), w, h, angle=ang, fc='none', ec=col, alpha=0.8, lw=0.7, zorder=1))
+
+
+def fig5_nature(out):
+    rc = {'font.family': 'Liberation Sans', 'font.size': 7, 'axes.linewidth': 0.5, 'xtick.major.width': 0.5,
+          'ytick.major.width': 0.5, 'xtick.major.size': 2, 'ytick.major.size': 2}
+    with plt.rc_context(rc):
+        m = meta()
+        r = pd.read_csv('results/codon/rscu.csv', index_col=0)
+        r.index = r.index.str.replace(' x ', '_x_').str.replace(' ', '_')
+        tr = Phylo.read('results/phylogeny/cds_ml.treefile', 'newick'); tr.root_with_outgroup('Amborella_trichopoda'); tr.ladderize(reverse=True)
+        order = [t.name for t in tr.get_terminals() if t.name in r.index]
+        B_ = 'TCAG'; AA = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG'
+        code = {a + b + c: AA[16 * i + 4 * j + k] for i, a in enumerate(B_) for j, b in enumerate(B_) for k, c in enumerate(B_)}
+        aa3 = dict(F='Phe', L='Leu', S='Ser', Y='Tyr', C='Cys', P='Pro', H='His', Q='Gln', R='Arg', I='Ile', T='Thr', N='Asn',
+                   K='Lys', V='Val', A='Ala', D='Asp', E='Glu', G='Gly')
+        cods = sorted(r.columns, key=lambda c: (aa3[code[c]], c[2] in 'GC', c))
+        M = r.loc[order, cods].T.values            # codons x species
+        fig = plt.figure(figsize=(7.2, 7.9))
+        gs = GridSpec(2, 3, figure=fig, height_ratios=[1.3, 1], hspace=0.5, wspace=0.5,
+                      left=0.085, right=0.975, top=0.965, bottom=0.12)
+        # ---- a: heatmap
+        gsa = gs[0, :].subgridspec(1, 2, width_ratios=[1, 0.012], wspace=0.01)
+        ax = fig.add_subplot(gsa[0, 0])
+        cmap = LinearSegmentedColormap.from_list('div', ['#1c5cab', '#86b6ef', '#f4f3ef', '#f2a07b', '#c7381b'])
+        vmax = float(np.ceil(np.nanmax(M) * 2) / 2)
+        im = ax.imshow(M, aspect='auto', cmap=cmap, norm=TwoSlopeNorm(vmin=0, vcenter=1, vmax=vmax), interpolation='nearest')
+        ax.set_yticks(range(len(cods))); ax.set_yticklabels([c.replace('T', 'U') for c in cods], fontsize=4.3, family='DejaVu Sans Mono')
+        ax.set_xticks(range(len(order))); ax.set_xticklabels([pretty(t) for t in order], rotation=90, fontsize=4.4, style='italic')
+        ax.tick_params(length=0, pad=1)
+        for k in range(1, len(cods)):
+            if code[cods[k]] != code[cods[k - 1]]:
+                ax.axhline(k - 0.5, color='white', lw=0.8)
+        # amino-acid labels and third-position bar on the left
+        prev = None; start = 0
+        for k, c in enumerate(cods + ['END']):
+            a = code.get(c)
+            if a != prev and prev is not None:
+                ax.text(-6.6, (start + k - 1) / 2, aa3[prev], ha='right', va='center', fontsize=5, clip_on=False)
+                start = k
+            prev = a
+        for k, c in enumerate(cods):
+            ax.add_patch(Rectangle((-5.4, k - 0.5), 0.9, 1, color='#3a3a3a' if c[2] in 'AT' else '#c9c8c3', clip_on=False, lw=0))
+        # family and order bars on top
+        for jx, t in enumerate(order):
+            ax.add_patch(Rectangle((jx - 0.5, -3.4), 1, 1.3, color=FAMCOL[m.loc[t, 'family']], clip_on=False, lw=0))
+            ax.add_patch(Rectangle((jx - 0.5, -1.9), 1, 1.3, color=ORDER_COL[m.loc[t, 'order']], clip_on=False, lw=0))
+        ax.text(-0.9, -2.75, 'Family', ha='right', va='center', fontsize=5.5, clip_on=False)
+        ax.text(-0.9, -1.25, 'Order', ha='right', va='center', fontsize=5.5, clip_on=False)
+        ax.set_ylim(len(cods) - 0.5, -3.6)
+        for sp in ax.spines.values(): sp.set_visible(False)
+        cax = fig.add_subplot(gsa[0, 1])
+        cb = fig.colorbar(im, cax=cax); cb.outline.set_linewidth(0.4); cb.ax.tick_params(labelsize=5.5, length=2)
+        cb.set_label('RSCU', fontsize=6)
+        # ---- b: PCA with ellipses and loadings
+        X = r.loc[order].values; mu = X.mean(0); sd = X.std(0, ddof=1); keep = sd > 0
+        Z = (X[:, keep] - mu[keep]) / sd[keep]
+        U, S, Vt = np.linalg.svd(Z, full_matrices=False); var = S ** 2 / (S ** 2).sum()
+        sc = U * S; load = Vt.T * S / np.sqrt(len(Z) - 1)
+        names_k = np.array(r.columns)[keep]
+        axb = fig.add_subplot(gs[1, 0])
+        fams = pd.Series([m.loc[t, 'family'] for t in order])
+        for f in fams.unique():
+            idx = np.where(fams == f)[0]
+            if len(idx) >= 3:
+                conf_ellipse(axb, sc[idx, 0], sc[idx, 1], FAMCOL[f])
+            axb.scatter(sc[idx, 0], sc[idx, 1], s=11, color=FAMCOL[f], edgecolor='white', lw=0.4, zorder=3)
+        k_ = order.index('Nepenthes_khasiana')
+        axb.annotate('N. khasiana', (sc[k_, 0], sc[k_, 1]), xytext=(-22, 16), textcoords='offset points', fontsize=5.5, style='italic',
+                     arrowprops=dict(arrowstyle='-', lw=0.4, color=INK2))
+        top = np.argsort(-(load[:, 0] ** 2 + load[:, 1] ** 2))[:6]
+        f_ = 0.75 * min(np.abs(sc[:, 0]).max() / np.abs(load[top, 0]).max(), np.abs(sc[:, 1]).max() / np.abs(load[top, 1]).max())
+        groups_ = []
+        for t in top:
+            ang = np.degrees(np.arctan2(load[t, 1], load[t, 0]))
+            for gq in groups_:
+                if abs(((ang - gq['ang']) + 180) % 360 - 180) < 15:
+                    gq['m'].append(t); break
+            else:
+                groups_.append({'ang': ang, 'm': [t]})
+        for t in top:
+            axb.annotate('', xy=(load[t, 0] * f_, load[t, 1] * f_), xytext=(0, 0),
+                         arrowprops=dict(arrowstyle='-|>', lw=0.5, color='#444444', mutation_scale=5), zorder=4)
+        for gq in groups_:
+            tt = max(gq['m'], key=lambda t: load[t, 0] ** 2 + load[t, 1] ** 2)
+            lx_, ly_ = load[tt, 0] * f_, load[tt, 1] * f_
+            ha = 'left' if lx_ > 0 else 'right'
+            axb.text(lx_ + (0.4 if lx_ > 0 else -0.4), ly_ + (0.5 if ly_ >= 0 else -0.8), ', '.join(names_k[t].replace('T', 'U') for t in gq['m']),
+                     fontsize=5, color='#333333', ha=ha, va='center', family='DejaVu Sans Mono', zorder=4,
+                     bbox=dict(boxstyle='square,pad=0.1', fc='white', ec='none', alpha=0.8))
+        tipx = np.r_[sc[:, 0], load[top, 0] * f_]; tipy = np.r_[sc[:, 1], load[top, 1] * f_]
+        ax0, ax1 = axb.get_xlim(); ay0, ay1 = axb.get_ylim()
+        axb.set_xlim(min(ax0, tipx.min() - 2.5), max(ax1, tipx.max() + 6.5)); axb.set_ylim(min(ay0, tipy.min() - 1.5), max(ay1, tipy.max() + 1.8))
+        axb.axhline(0, color=GRID, lw=0.4, zorder=0); axb.axvline(0, color=GRID, lw=0.4, zorder=0)
+        axb.set_xlabel(f'PC1 ({var[0]:.1%})'); axb.set_ylabel(f'PC2 ({var[1]:.1%})')
+        for sp in ('top', 'right'): axb.spines[sp].set_visible(False)
+        axb.tick_params(labelsize=6)
+        # ---- c: ENC vs GC3s
+        e = pd.read_csv('results/codon/enc_gc3.csv'); e['family'] = e.species.map(dict(zip(m.species, m.family)))
+        axc = fig.add_subplot(gs[1, 1])
+        s_ = np.linspace(0.2, 0.36, 200)
+        axc.plot(s_, 2 + s_ + 29 / (s_ ** 2 + (1 - s_) ** 2), color='#333333', lw=0.8, zorder=1)
+        xe_ = 0.300; ye_ = 2 + xe_ + 29 / (xe_ ** 2 + (1 - xe_) ** 2)
+        axc.annotate('Expected under\nmutation only', xy=(xe_, ye_), xytext=(0.2445, 52.9), fontsize=5.2, color='#333333',
+                     va='center', ha='left', arrowprops=dict(arrowstyle='-', lw=0.4, color='#777777'))
+        for f, g in e.groupby('family'):
+            axc.scatter(g.GC3s, g.ENC, s=11, color=FAMCOL[f], edgecolor='white', lw=0.4, zorder=3,
+                        marker='D' if f == 'Amborellaceae' else 'o')
+        axc.set_xlim(0.24, 0.31); axc.set_ylim(47.5, 53.5)
+        axc.set_xlabel('GC3s'); axc.set_ylabel('ENC')
+        for sp in ('top', 'right'): axc.spines[sp].set_visible(False)
+        axc.tick_params(labelsize=6)
+        # ---- d: dumbbell of mean RSCU, A/U- vs G/C-ending codons, by family
+        axd = fig.add_subplot(gs[1, 2])
+        at = [c for c in r.columns if c[2] in 'AT']; gc = [c for c in r.columns if c[2] in 'GC']
+        fl = [f for f in ['Lentibulariaceae', 'Sarraceniaceae', 'Roridulaceae', 'Droseraceae', 'Nepenthaceae', 'Drosophyllaceae',
+                          'Dioncophyllaceae', 'Cephalotaceae', 'Bromeliaceae'] if f in set(fams)]
+        for i, f in enumerate(fl):
+            ts = [t for t in order if m.loc[t, 'family'] == f]
+            va = r.loc[ts, at].mean(axis=1).values; vg = r.loc[ts, gc].mean(axis=1).values
+            axd.plot([vg.mean(), va.mean()], [i, i], color='#bdbcb6', lw=1.6, zorder=1, solid_capstyle='round')
+            axd.scatter(va.mean(), i, s=22, color=FAMCOL[f], edgecolor='white', lw=0.5, zorder=3)
+            axd.scatter(vg.mean(), i, s=22, facecolor='white', edgecolor=FAMCOL[f], lw=1.0, zorder=3)
+            if len(ts) > 2:
+                axd.plot([va.min(), va.max()], [i, i], color=FAMCOL[f], lw=0.5, zorder=2)
+                axd.plot([vg.min(), vg.max()], [i, i], color=FAMCOL[f], lw=0.5, zorder=2)
+        axd.axvline(1, color='#888888', lw=0.5, ls=(0, (2, 2)))
+        axd.set_yticks(range(len(fl))); axd.set_yticklabels(fl, fontsize=5.6); axd.invert_yaxis()
+        axd.set_xlim(0.4, 1.6); axd.set_xlabel('Mean RSCU')
+        axd.text(0.58, -0.9, 'G/C-ending', ha='center', fontsize=5.4, color='#333333')
+        axd.text(1.43, -0.9, 'A/U-ending', ha='center', fontsize=5.4, color='#333333')
+        axd.set_ylim(len(fl) - 0.5, -1.3)
+        for sp in ('top', 'right'): axd.spines[sp].set_visible(False)
+        axd.tick_params(labelsize=6)
+        for axx, lab in ((ax, 'A'), (axb, 'B'), (axc, 'C'), (axd, 'D')):
+            p = axx.get_position()
+            fig.text(0.008 if lab in 'AB' else p.x0 - 0.075, (p.y1 + 0.035) if lab == 'A' else p.y1 + 0.02, lab, fontsize=9, weight='bold')
+        # shared family legend
+        hs = [Line2D([], [], ls='', marker='o', color=FAMCOL[f], markeredgecolor='white', markersize=4.5, label=f) for f in fl]
+        hs += [Line2D([], [], ls='', marker='D', color=FAMCOL['Amborellaceae'], markeredgecolor='white', markersize=4, label='Amborellaceae (outgroup)')]
+        hs += [Patch(fc=c, label=o) for o, c in ORDER_COL.items() if o != 'Amborellales']
+        hs += [Patch(fc='#3a3a3a', label='A/U-ending codon'), Patch(fc='#c9c8c3', label='G/C-ending codon')]
+        fig.legend(handles=hs, loc='lower center', ncol=6, frameon=False, fontsize=5.6, bbox_to_anchor=(0.5, 0.0),
+                   handletextpad=0.3, columnspacing=1.0)
+        fig.savefig(out, dpi=300, bbox_inches='tight'); plt.close(fig)
+
+
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(); ap.add_argument('--outdir', default='figures'); ap.add_argument('--only', default='')
     a = ap.parse_args(); os.makedirs(a.outdir, exist_ok=True)
     todo = a.only.split(',') if a.only else ['3', '5', '6', 'S1', '2A']
     if '3' in todo: fig3_illustrated(os.path.join(a.outdir, 'Figure3.png'))
     if '3plain' in todo: fig3(os.path.join(a.outdir, 'Figure3_plain.png'))
-    if '5' in todo: fig5(os.path.join(a.outdir, 'Figure5.png'))
+    if '5' in todo: fig5_nature(os.path.join(a.outdir, 'Figure5.png'))
+    if '5plain' in todo: fig5(os.path.join(a.outdir, 'Figure5_plain.png'))
     if '6' in todo: fig6(os.path.join(a.outdir, 'Figure6.png'))
     if 'S1' in todo: figS1(os.path.join(a.outdir, 'FigureS1.png'))
     if '2A' in todo: fig2a_classic(os.path.join(a.outdir, 'Figure2A.png'))
