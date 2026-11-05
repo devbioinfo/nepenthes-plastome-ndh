@@ -1,0 +1,29 @@
+{
+  "title": "A comparative pan-plastome analysis of carnivorous plants reveals structural conservatism in Nepenthes khasiana and lineage-specific loss and pseudogenization of ndh genes (data and code)",
+  "upload_type": "software",
+  "description": "Data, analysis scripts and results accompanying the article submitted to Bioinformatics Advances (BIOADV-2026-545): GenBank accessions and records for 49 carnivorous plant plastomes and Amborella trichopoda, plastid ndh gene-status calls, codon alignments and IQ-TREE phylogeny, k-mer (Mash) and ANIb whole-plastome comparisons, RSCU/ENC codon-usage and dN/dS analyses, and the scripts that regenerate all figures and supplementary tables (run_all.sh).",
+  "creators": [
+    {
+      "name": "Konhar, Ruchishree"
+    },
+    {
+      "name": "Dash, Debasis"
+    },
+    {
+      "name": "Biswal, Devendra Kumar"
+    }
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "keywords": [
+    "plastome",
+    "chloroplast genome",
+    "carnivorous plants",
+    "Nepenthes khasiana",
+    "ndh genes",
+    "pseudogenization",
+    "phylogenomics",
+    "codon usage"
+  ],
+  "version": "1.0.0"
+}
