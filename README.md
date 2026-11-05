@@ -1,8 +1,12 @@
 # nepenthes-plastome-ndh
 
+[![DOI](https://zenodo.org/badge/1447370903.svg)](https://doi.org/10.5281/zenodo.23987594)
+
 Data, code and results for:
 
 > Konhar R, Dash D, Biswal DK. *A comparative pan-plastome analysis of carnivorous plants reveals structural conservatism in* Nepenthes khasiana *and lineage-specific loss and pseudogenization of* ndh *genes.* Bioinformatics Advances (in revision, BIOADV-2026-545).
+
+Archived version used in the paper: release v1.0.0, https://doi.org/10.5281/zenodo.23987595 (all versions: https://doi.org/10.5281/zenodo.23987594).
 
 The dataset is 49 carnivorous plant plastomes from nine families and five orders, plus *Amborella trichopoda* as the only non-carnivorous taxon (outgroup). The focal plastomes are *Nepenthes khasiana* (MH923233 / NC_051455) and *N. gracilis* (PP035775).
 

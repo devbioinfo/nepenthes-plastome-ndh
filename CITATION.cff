@@ -9,4 +9,5 @@ authors:
   - family-names: Biswal
     given-names: Devendra Kumar
 license: MIT
-repository-code: "https://github.com/OWNER/nepenthes-plastome-ndh"
+repository-code: "https://github.com/devbioinfo/nepenthes-plastome-ndh"
+doi: "10.5281/zenodo.23987595"
